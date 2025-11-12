@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:goviet_map_app/app_theme.dart';
 import 'package:goviet_map_app/views/Onboarding/start_screen.dart';
 
 void main() {
@@ -13,6 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       home: const StartScreen(),
+      theme: AppTheme.lightTheme,
       debugShowCheckedModeBanner: false,
     );
   }

@@ -3,16 +3,22 @@ import 'package:flutter/material.dart';
 class AppTheme {
 
   //Heading
-  static const TextStyle h1 = TextStyle(
+  static const TextStyle  h1 = TextStyle(
     fontSize: 32,
     fontWeight: FontWeight.bold,
     height: 40 / 32,
   );
 
   static const TextStyle h2 = TextStyle(
+    fontSize: 28,
+    fontWeight: FontWeight.w600,
+    height: 32 / 28,
+  );
+  
+  static const TextStyle h3 = TextStyle(
     fontSize: 24,
     fontWeight: FontWeight.w600,
-    height: 32 / 24,
+    height: 32 / 28,
   );
 
   // Subtitle
@@ -43,8 +49,8 @@ class AppTheme {
 
   // Button
   static const TextStyle button1 = TextStyle(
-    fontSize: 14,
-    fontWeight: FontWeight.w500,
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
     height: 16 / 14,
   );
 
@@ -70,7 +76,8 @@ class AppTheme {
   static ThemeData lightTheme = ThemeData(
     textTheme: const TextTheme(
       headlineLarge: h1,      
-      headlineMedium: h2,    
+      headlineMedium: h2, 
+      headlineSmall: h3,  
       titleLarge: sub1,       
       titleMedium: sub2,      
       bodyLarge: body1,      
