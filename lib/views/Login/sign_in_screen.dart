@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:goviet_map_app/views/Home/home_screen.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -75,7 +76,12 @@ class _SignInScreenState extends State<SignInScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: (){}, 
+                onPressed: (){
+                  Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder: (context) => HomeScreen())
+                  );
+                }, 
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.all(12),
                   backgroundColor: Color(0xff659B4D),

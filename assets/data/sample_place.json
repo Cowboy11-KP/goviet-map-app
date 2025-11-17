@@ -1,0 +1,48 @@
+[
+  {
+    "id": "1",
+    "name": "Bãi biển Mỹ Khê",
+    "province": "Đà Nẵng",
+    "description": "Bãi biển dài với cát trắng mịn, nước trong xanh.",
+    "latitude": 16.0544,
+    "longitude": 108.2022,
+    "image": "https://example.com/mykhe.jpg",
+    "category": "beach",
+    "rating": 4.5,
+    "reviewCount": 120,
+    "comments": [
+      {
+        "user": "Nguyen Van A",
+        "comment": "Rất đẹp, nước biển trong và sạch.",
+        "rating": 5,
+        "date": "2025-11-17"
+      },
+      {
+        "user": "Tran Thi B",
+        "comment": "Thuê ghế nằm hơi đắt nhưng đáng giá.",
+        "rating": 4,
+        "date": "2025-10-10"
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "name": "Chùa Linh Ứng",
+    "province": "Đà Nẵng",
+    "description": "Ngôi chùa nổi tiếng với tượng Phật Bà cao nhất Việt Nam.",
+    "latitude": 16.0583,
+    "longitude": 108.2345,
+    "image": "https://example.com/linhung.jpg",
+    "category": "pagoda",
+    "rating": 4.7,
+    "reviewCount": 98,
+    "comments": [
+      {
+        "user": "Le Van C",
+        "comment": "Phong cảnh tuyệt đẹp, không gian yên tĩnh.",
+        "rating": 5,
+        "date": "2025-09-21"
+      }
+    ]
+  }
+]
