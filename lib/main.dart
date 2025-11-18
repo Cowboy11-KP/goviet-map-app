@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:goviet_map_app/viewmodels/location_viewmodel.dart';
+import 'package:provider/provider.dart';
 import 'package:goviet_map_app/app_theme.dart';
 import 'package:goviet_map_app/views/Onboarding/start_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => LocationProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

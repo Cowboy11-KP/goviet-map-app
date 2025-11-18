@@ -10,6 +10,7 @@
     "category": "beach",
     "rating": 4.5,
     "reviewCount": 120,
+    "openHours": "6:00-18:00",
     "comments": [
       {
         "user": "Nguyen Van A",
@@ -36,6 +37,7 @@
     "category": "pagoda",
     "rating": 4.7,
     "reviewCount": 98,
+    "openHours": "7:00-17:00",
     "comments": [
       {
         "user": "Le Van C",

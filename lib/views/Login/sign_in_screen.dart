@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:goviet_map_app/views/Home/home_screen.dart';
+import 'package:goviet_map_app/views/Home/root_screen.dart.dart';
+
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -79,7 +80,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 onPressed: (){
                   Navigator.push(
                     context, 
-                    MaterialPageRoute(builder: (context) => HomeScreen())
+                    MaterialPageRoute(builder: (context) => RootScreen())
                   );
                 }, 
                 style: ElevatedButton.styleFrom(

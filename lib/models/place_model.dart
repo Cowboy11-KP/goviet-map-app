@@ -42,6 +42,7 @@ class Place {
   final String category; // beach, mountain, pagoda, city, waterfall…
   final double rating; // average rating (1–5)
   final int reviewCount;
+  final String openHours; // <--- mới thêm
   final List<Comment> comments;
 
   Place({
@@ -55,10 +56,11 @@ class Place {
     required this.category,
     required this.rating,
     required this.reviewCount,
+    required this.openHours, // <--- mới thêm
     required this.comments,
   });
 
-  factory Place.fromMap(Map<String, dynamic> map) {
+  factory Place.fromJson(Map<String, dynamic> map) {
     return Place(
       id: map['id'],
       name: map['name'],
@@ -70,6 +72,7 @@ class Place {
       category: map['category'],
       rating: (map['rating'] as num).toDouble(),
       reviewCount: map['reviewCount'],
+      openHours: map['openHours'], // <--- mới thêm
       comments: (map['comments'] as List)
           .map((c) => Comment.fromMap(c))
           .toList(),
@@ -88,7 +91,9 @@ class Place {
       'category': category,
       'rating': rating,
       'reviewCount': reviewCount,
+      'openHours': openHours, // <--- mới thêm
       'comments': comments.map((c) => c.toMap()).toList(),
     };
   }
 }
+

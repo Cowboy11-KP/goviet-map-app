@@ -16,14 +16,14 @@ class AppTheme {
   );
   
   static const TextStyle h3 = TextStyle(
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: FontWeight.w600,
     height: 32 / 28,
   );
 
   // Subtitle
   static const TextStyle sub1 = TextStyle(
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: FontWeight.w500,
     height: 26 / 18,
   );
@@ -56,14 +56,14 @@ class AppTheme {
 
   static const TextStyle button2 = TextStyle(
     fontSize: 14,
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.w500,
     height: 16 / 14,
   );
 
   // Caption
   static const TextStyle caption1 = TextStyle(
     fontSize: 12,
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.w600,
     height: 18 / 12,
   );
 
@@ -71,9 +71,11 @@ class AppTheme {
     fontSize: 10,
     fontWeight: FontWeight.w400,
     height: 14 / 10,
+    
   );
 
   static ThemeData lightTheme = ThemeData(
+    scaffoldBackgroundColor: Color(0xffE5E5E5),
     textTheme: const TextTheme(
       headlineLarge: h1,      
       headlineMedium: h2, 
