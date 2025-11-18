@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:goviet_map_app/models/place_model.dart';
+import 'package:goviet_map_app/viewmodels/location_viewmodel.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -36,85 +38,120 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
+    final locationProvider = context.watch<LocationProvider>();
     final theme = Theme.of(context);
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,  
-          children: [
-            Text(
-              'Gần bạn',
-              style: theme.textTheme.headlineSmall,
-            ),
-            IconButton(
-              onPressed: (){}, 
-              icon: Icon(Icons.arrow_forward_ios_rounded)
-            )
-          ],
-        ),
-        SizedBox(
-          height: 280,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 1,
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                child: _build(
-                  'https://lh3.googleusercontent.com/p/AF1QipMd7iMOFu0NZHQVAL5PmnlxkLiF8CW1nT3oUsnI=w289-h312-n-k-no',
-                  'Tiệm Cà Phê Túi Mơ To', 
-                  'Cách 2km',
-                  '8:00-16:00', 
-                  '5.0', 
-                  'Bạn có thể đến vào buổi chiều để vừa nhâm nhi ly cà phê vừa ngắm ánh hoàng hôn mờ ảo của Đà Lạt'
-                )
-              );
-            },
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,  
+            children: [
+              Text(
+                'Gần bạn',
+                style: theme.textTheme.headlineSmall,
+              ),
+              IconButton(
+                onPressed: (){}, 
+                icon: Icon(Icons.arrow_forward_ios_rounded)
+              )
+            ],
           ),
-        ),
-        const SizedBox(height: 12),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,  
-          children: [
-            Text(
-              'Phổ biến',
-              style: theme.textTheme.headlineSmall,
+          SizedBox(
+            height: 280,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: places.length,
+              itemBuilder: (context, index) {
+                final place = places[index];
+                
+                double? distance;
+                if (locationProvider.currentPosition != null) {
+                  distance = LocationProvider.calculateDistance(
+                    locationProvider.currentPosition!.latitude,
+                    locationProvider.currentPosition!.longitude,
+                    place.latitude,
+                    place.longitude,
+                  );
+                }
+      
+                return GestureDetector(
+                  child: _build(
+                    imageUrl: place.image,
+                    name: place.name,
+                    distance: distance != null
+                      ? "Cách ${distance!.toStringAsFixed(1)} km"
+                      : "Không xác định",
+                    openHours: place.openHours,       
+                    rating: place.rating.toString(),
+                    description: place.description,
+                  )
+                );
+              },
             ),
-            IconButton(
-              onPressed: (){}, 
-              icon: Icon(Icons.arrow_forward_ios_rounded)
-            )
-          ],
-        ),
-        SizedBox(
-          height: 286,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: places.length,
-            itemBuilder: (context, index) {
-               final place = places[index];
-              return GestureDetector(
-                child: _build(
-                  place.image,
-                  place.name,
-                  '${place.province}', // hoặc khoảng cách nếu có geolocator
-                  place.openHours,        // nếu JSON có, lấy luôn
-                  place.rating.toString(),
-                  place.description,
-                )
-              );
-            },
           ),
-        ),
-      ],
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,  
+            children: [
+              Text(
+                'Phổ biến',
+                style: theme.textTheme.headlineSmall,
+              ),
+              IconButton(
+                onPressed: (){}, 
+                icon: Icon(Icons.arrow_forward_ios_rounded)
+              )
+            ],
+          ),
+          SizedBox(
+            height: 286,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: places.length,
+              itemBuilder: (context, index) {
+                 final place = places[index];
+      
+                 double? distance;
+                if (locationProvider.currentPosition != null) {
+                  distance = LocationProvider.calculateDistance(
+                    locationProvider.currentPosition!.latitude,
+                    locationProvider.currentPosition!.longitude,
+                    place.latitude,
+                    place.longitude,
+                  );
+                }
+                return GestureDetector(
+                  child: _build(
+                    imageUrl: place.image,
+                    name: place.name,
+                    distance: distance != null
+                      ? "Cách ${distance!.toStringAsFixed(1)} km"
+                      : "Không xác định", 
+                    openHours: place.openHours,     
+                    rating: place.rating.toString(),
+                    description: place.description,
+                  )
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'Khám phá các địa điểm hấp dẫn   ',
+            style: theme.textTheme.headlineSmall,
+          ),
+        ],
+      ),
     );
   }
 
-  Widget _build(String imageUrl, String name, String distance, String openHours, String rating, String description ) {
+  Widget _build({required String imageUrl, required String name, required String distance, required String openHours, required String rating, required String description} ) {
     return Container(
       height: 280,
       width: 210,
       padding: const EdgeInsets.all(4),
+      margin: EdgeInsets.only(right: 8),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),

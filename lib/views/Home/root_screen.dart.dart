@@ -35,6 +35,9 @@ class _HomeScreenState extends State<RootScreen> {
       FavoriteScreen(),
       ProfileScreen(),
     ];
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<LocationProvider>().fetchLocation();
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -42,47 +45,74 @@ class _HomeScreenState extends State<RootScreen> {
 
     final locationProvider = context.watch<LocationProvider>();
     return  Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Color(0xff80B966),
-                    Color(0xff71A759),
-                    Color(0xff6CA155),
-                    Color(0xff588D40),
-                    Color(0xff4D8235),
-                  ],
-                  stops: [0.0, 0.29, 0.44, 0.75, 1.0],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter 
-                )
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const SizedBox(height: 16),
-                  ListTile(
-                    leading: Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25),
-                        color: Colors.white
-                      ),
+      body: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xff80B966),
+                  Color(0xff71A759),
+                  Color(0xff6CA155),
+                  Color(0xff588D40),
+                  Color(0xff4D8235),
+                ],
+                stops: [0.0, 0.29, 0.44, 0.75, 1.0],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter 
+              )
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 16),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25),
+                      color: Colors.white
                     ),
-                    title: Text('Vị trí của bạn là'),
-                    titleTextStyle: theme.textTheme.displaySmall!.copyWith(color: Color(0xffE5E5E5)),
-                    subtitle: locationProvider.isLoading
-                      ? const CircularProgressIndicator()
+                  ),
+                  title: Row(
+                    children: [ 
+                      Container(
+                        height: 24,
+                        width: 24,
+                        child: IconButton(
+                          padding: EdgeInsets.zero,
+                          constraints: BoxConstraints(),
+                          onPressed: () {
+                            context.read<LocationProvider>().fetchLocation();
+                          }, 
+                          icon: Icon(Icons.location_on_outlined, color: Colors.white, size: 20,),
+                          
+                        ),
+                      ),
+                      Text('Vị trí của bạn là'),
+                    ],
+                  ),
+                  titleTextStyle: theme.textTheme.displaySmall!.copyWith(color: Color(0xffE5E5E5)),
+                  subtitle: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: locationProvider.isLoading
+                      ? SizedBox(
+                        width: 50,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const CircularProgressIndicator(color: Colors.white,),
+                          ],
+                        )
+                      )
                       : locationProvider.hasPosition
                           ? Text(
-                              'Latitude: ${locationProvider.currentPosition!.latitude}, '
-                              'Longitude: ${locationProvider.currentPosition!.longitude}',
+                              locationProvider.currentAddress.toString(),
                             )
                           : TextButton(
                               onPressed: () {
@@ -90,41 +120,43 @@ class _HomeScreenState extends State<RootScreen> {
                               },
                               child: const Text('Nhấn để lấy vị trí hiện tại'),
                             ),
-                    subtitleTextStyle: theme.textTheme.displayLarge!.copyWith(color: Colors.white),
-                    trailing: IconButton(
-                      onPressed: () {}, 
-                      icon: SvgPicture.asset('assets/icons/notifi.svg', width: 24,)
+                  ),
+                  subtitleTextStyle: theme.textTheme.displayLarge!.copyWith(color: Colors.white),
+                  trailing: IconButton(
+                    onPressed: () {}, 
+                    icon: SvgPicture.asset('assets/icons/notifi.svg', width: 24,)
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(
+                      color: Color(0xff8B8B8B )
+                    )
+                  ),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: "Tìm kiếm...",
+                      prefixIcon: const Icon(Icons.search),
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
                     ),
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(24),
-                      border: Border.all(
-                        color: Color(0xff8B8B8B )
-                      )
-                    ),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: "Tìm kiếm...",
-                        prefixIcon: const Icon(Icons.search),
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-                      ),
-                    ),
-                  )
-                ],
-              ),
+                )
+              ],
             ),
-            Padding(
+          ),
+          Expanded(
+            child: Padding(
               padding: const EdgeInsets.all(16),
               child: IndexedStack(
                 index: currentIndex,
                 children: _screens,
               ),
-            ) 
-          ],
-        ),
+            ),
+          ) 
+        ],
       ),
       
       bottomNavigationBar: Container(

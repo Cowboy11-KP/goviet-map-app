@@ -1,16 +1,16 @@
 [
   {
     "id": "1",
-    "name": "Bãi biển Mỹ Khê",
-    "province": "Đà Nẵng",
-    "description": "Bãi biển dài với cát trắng mịn, nước trong xanh.",
+    "name": "Tiệm Cà Phê Túi Mơ To",
+    "province": "Đà Lạt",
+    "description": "Bạn có thể đến vào buổi chiều để vừa nhâm nhi ly cà phê vừa ngắm ánh hoàng hôn mờ ảo của Đà Lạt",
     "latitude": 16.0544,
     "longitude": 108.2022,
-    "image": "https://example.com/mykhe.jpg",
-    "category": "beach",
-    "rating": 4.5,
+    "image": "https://lh3.googleusercontent.com/p/AF1QipMd7iMOFu0NZHQVAL5PmnlxkLiF8CW1nT3oUsnI=w289-h312-n-k-no",
+    "category": "cafe",
+    "rating": 5.0,
     "reviewCount": 120,
-    "openHours": "6:00-18:00",
+    "openHours": "8:00-16:00",
     "comments": [
       {
         "user": "Nguyen Van A",
@@ -28,22 +28,28 @@
   },
   {
     "id": "2",
-    "name": "Chùa Linh Ứng",
-    "province": "Đà Nẵng",
-    "description": "Ngôi chùa nổi tiếng với tượng Phật Bà cao nhất Việt Nam.",
-    "latitude": 16.0583,
-    "longitude": 108.2345,
-    "image": "https://example.com/linhung.jpg",
-    "category": "pagoda",
-    "rating": 4.7,
-    "reviewCount": 98,
-    "openHours": "7:00-17:00",
+    "name": "Thung Lũng Tình Yêu",
+    "province": "Đà Lạt",
+    "description": "Khung cảnh nên thơ, lý tưởng để dạo chơi, chụp ảnh và tận hưởng không khí trong lành của cao nguyên",
+    "latitude": 16.0544,
+    "longitude": 108.2022,
+    "image": "https://www.vietnamairlines.com/~/media/SEO-images/2025%20SEO/Traffic%20TV/thung-lung-tinh-yeu/thumb-thung-lung-tinh-yeu.jpg",
+    "category": "cafe",
+    "rating": 5.0,
+    "reviewCount": 120,
+    "openHours": "8:00-16:00",
     "comments": [
       {
-        "user": "Le Van C",
-        "comment": "Phong cảnh tuyệt đẹp, không gian yên tĩnh.",
+        "user": "Nguyen Van A",
+        "comment": "Rất đẹp, nước biển trong và sạch.",
         "rating": 5,
-        "date": "2025-09-21"
+        "date": "2025-11-17"
+      },
+      {
+        "user": "Tran Thi B",
+        "comment": "Thuê ghế nằm hơi đắt nhưng đáng giá.",
+        "rating": 4,
+        "date": "2025-10-10"
       }
     ]
   }

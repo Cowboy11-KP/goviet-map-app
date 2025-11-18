@@ -1,17 +1,42 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 class LocationProvider extends ChangeNotifier {
+
+  static double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+    const earthRadius = 6371;
+    double dLat = _degToRad(lat2 - lat1);
+    double dLon = _degToRad(lon2 - lon1);
+
+    double a = sin(dLat / 2) * sin(dLat / 2) +
+        cos(_degToRad(lat1)) *
+            cos(_degToRad(lat2)) *
+            sin(dLon / 2) *
+            sin(dLon / 2);
+
+    double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+
+    return earthRadius * c;
+  }
+
+  static double _degToRad(double deg) => deg * (pi / 180);
+
   Position? _currentPosition;
+  String? _currentAddress;
   String? _error;
   bool _isLoading = false;
 
   Position? get currentPosition => _currentPosition;
+  String? get currentAddress => _currentAddress;
   String? get error => _error;
   bool get isLoading => _isLoading;
 
   bool get hasPosition => _currentPosition != null;
 
+  //Hàm lấy tọa độ
   Future<void> fetchLocation() async {
     _isLoading = true;
     notifyListeners();
@@ -52,7 +77,13 @@ class LocationProvider extends ChangeNotifier {
         );
         _error = null;
 
-        debugPrint('Vị trí lấy được: $_currentPosition');
+        if (_currentPosition != null) {
+          _currentAddress = await getAddressFromLatLng(
+            _currentPosition!.latitude,
+            _currentPosition!.longitude,
+          );
+          debugPrint("Địa chỉ hiện tại: $_currentAddress");
+        }
 
         if (_currentPosition == null) {
           _error = 'Không lấy được vị trí, kiểm tra GPS hoặc quyền';
@@ -71,4 +102,20 @@ class LocationProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  //Hàm đổi tọa độ thành vị trí 
+  Future<String> getAddressFromLatLng(double lat, double lng) async {
+  try {
+    List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
+
+    if (placemarks.isNotEmpty) {
+      final place = placemarks.first;
+      return "${place.street}, ${place.subLocality}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
+    } else {
+      return "Không tìm thấy địa chỉ";
+    }
+  } catch (e) {
+    return "Lỗi chuyển đổi vị trí: $e";
+  }
+}
 }
