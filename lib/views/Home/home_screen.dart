@@ -80,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     imageUrl: place.image,
                     name: place.name,
                     distance: distance != null
-                      ? "Cách ${distance!.toStringAsFixed(1)} km"
+                      ? "Cách ${distance.toStringAsFixed(1)} km"
                       : "Không xác định",
                     openHours: place.openHours,       
                     rating: place.rating.toString(),
@@ -126,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     imageUrl: place.image,
                     name: place.name,
                     distance: distance != null
-                      ? "Cách ${distance!.toStringAsFixed(1)} km"
+                      ? "Cách ${distance.toStringAsFixed(1)} km"
                       : "Không xác định", 
                     openHours: place.openHours,     
                     rating: place.rating.toString(),
