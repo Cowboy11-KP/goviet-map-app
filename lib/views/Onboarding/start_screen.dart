@@ -34,6 +34,7 @@ class StartScreen extends StatelessWidget {
 
           const SizedBox(height: 21),
           Image.asset('assets/logo.png'),
+          
           ElevatedButton(
             onPressed: () {
               Navigator.push(

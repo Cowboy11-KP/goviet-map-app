@@ -49,12 +49,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
   Widget build(BuildContext context) {
     final locationProvider = context.watch<LocationProvider>();
     final currentPosition = locationProvider.currentPosition;
-
-    // --- SỬA LỖI Ở ĐÂY ---
     // Tạo biến an toàn: Nếu có vị trí thì lấy, nếu không thì null
     LatLng? myLocation;
     if (currentPosition != null) {
-      myLocation = LatLng(currentPosition.latitude, currentPosition.longitude);
+      myLocation = LatLng(16.047079, 108.206230);
+      // LatLng(currentPosition.latitude, currentPosition.longitude);
       
       // Tự động di chuyển camera đến vị trí người dùng khi mới lấy được tọa độ lần đầu
       if (!_hasMovedToUser) {
@@ -132,7 +131,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                         Icon(
                           spot['icon'],
                           color: spot['color'],
-                          size: 40,
+                          size: 20,
                         ),
                         Text(
                           spot['name'],
