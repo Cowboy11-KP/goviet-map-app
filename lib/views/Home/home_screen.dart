@@ -1,10 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:goviet_map_app/models/place_model.dart';
 import 'package:goviet_map_app/viewmodels/location_viewmodel.dart';
+import 'package:goviet_map_app/viewmodels/place_viewmodel.dart';
+import 'package:goviet_map_app/views/detail/detail_screen.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -16,30 +14,21 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-  Future<List<Place>> loadPlaces() async {
-    final jsonStr = await rootBundle.loadString('assets/data/sample_place.json');
-    final List data = jsonDecode(jsonStr);
-    return data.map((e) => Place.fromJson(e)).toList();
-  }
-
-  List<Place> places = [];
   bool isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    loadPlaces().then((data) {
-      setState(() {
-        places = data;
-        isLoading = false;
-      });
-    });
-  } 
 
   @override
   Widget build(BuildContext context) {
     final locationProvider = context.watch<LocationProvider>();
+    final placeViewModel = context.watch<PlaceViewModel>();
+
     final theme = Theme.of(context);
+    
+    if (placeViewModel.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    final places = placeViewModel.places;
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,14 +59,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   distance = LocationProvider.calculateDistance(
                     locationProvider.currentPosition!.latitude,
                     locationProvider.currentPosition!.longitude,
-                    place.latitude,
-                    place.longitude,
+                    place.location.latitude,
+                    place.location.longitude,
                   );
                 }
       
                 return GestureDetector(
+                  onTap: (){
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(builder: (context) => DetailScreen(place: place))
+                    );
+                  },
                   child: _build(
-                    imageUrl: place.image,
+                    imageUrl: place.images[0],
                     name: place.name,
                     distance: distance != null
                       ? "Cách ${distance.toStringAsFixed(1)} km"
@@ -117,13 +112,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   distance = LocationProvider.calculateDistance(
                     locationProvider.currentPosition!.latitude,
                     locationProvider.currentPosition!.longitude,
-                    place.latitude,
-                    place.longitude,
+                    place.location.latitude,
+                    place.location.longitude,
                   );
                 }
                 return GestureDetector(
                   child: _build(
-                    imageUrl: place.image,
+                    imageUrl: place.images[0],
                     name: place.name,
                     distance: distance != null
                       ? "Cách ${distance.toStringAsFixed(1)} km"

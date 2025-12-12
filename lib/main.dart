@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goviet_map_app/viewmodels/location_viewmodel.dart';
+import 'package:goviet_map_app/viewmodels/place_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:goviet_map_app/app_theme.dart';
 import 'package:goviet_map_app/views/Onboarding/start_screen.dart';
@@ -9,6 +10,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => LocationProvider()),
+        ChangeNotifierProvider(create: (_) => PlaceViewModel()..loadPlaces()),
       ],
       child: const MyApp(),
     ),

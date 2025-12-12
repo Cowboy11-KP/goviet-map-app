@@ -1,0 +1,1029 @@
+[
+  {
+    "id": "1",
+    "name": "Hồ Gươm",
+    "province": "Hà Nội",
+    "description": "Khám phá Hồ Gươm, một trong những điểm đến hấp dẫn nhất tại Hà Nội. Nơi đây nổi tiếng với phong cảnh tuyệt đẹp và những trải nghiệm văn hóa độc đáo.",
+    "location": {
+      "latitude": 21.0288313,
+      "longitude": 105.8525357,
+      "address": "Hồ Hoàn Kiếm, Phường Hoàn Kiếm, Thành phố Hà Nội, 11024, Việt Nam"
+    },
+    "images": [
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Thap_Rua.jpg/1200px-Thap_Rua.jpg"
+    ],
+    "category": "travel",
+    "rating": 4.5,
+    "reviewCount": 5,
+    "openHours": "08:00 - 22:00",
+    "comments": [
+      {
+        "user": "User 594",
+        "comment": "Cảnh đẹp xuất sắc.",
+        "rating": 4.0,
+        "date": "2025-12-12T18:15:42.355535",
+        "images": []
+      },
+      {
+        "user": "User 284",
+        "comment": "Rất tuyệt vời!",
+        "rating": 4.0,
+        "date": "2025-12-12T18:15:42.355555",
+        "images": []
+      },
+      {
+        "user": "User 858",
+        "comment": "Sẽ quay lại lần sau.",
+        "rating": 5.0,
+        "date": "2025-12-12T18:15:42.355563",
+        "images": []
+      },
+      {
+        "user": "User 790",
+        "comment": "Sẽ quay lại lần sau.",
+        "rating": 5.0,
+        "date": "2025-12-12T18:15:42.355569",
+        "images": []
+      },
+      {
+        "user": "User 615",
+        "comment": "Cảnh đẹp xuất sắc.",
+        "rating": 5.0,
+        "date": "2025-12-12T18:15:42.355575",
+        "images": []
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "name": "Lăng Chủ tịch Hồ Chí Minh",
+    "province": "Hà Nội",
+    "description": "Khám phá Lăng Chủ tịch Hồ Chí Minh, một trong những điểm đến hấp dẫn nhất tại Hà Nội. Nơi đây nổi tiếng với phong cảnh tuyệt đẹp và những trải nghiệm văn hóa độc đáo.",
+    "location": {
+      "latitude": 21.0367831,
+      "longitude": 105.8346888,
+      "address": "Lăng Chủ tịch Hồ Chí Minh, 1, Đường Hùng Vương, Phường Ba Đình, Thành phố Hà Nội, 11120, Việt Nam"
+    },
+    "images": [
+      "https://upload.wikimedia.org/wikipedia/commons/e/e0/Ho_Chi_Minh_Mausoleum_-_20131227.jpg"
+    ],
+    "category": "travel",
+    "rating": 4.5,
+    "reviewCount": 5,
+    "openHours": "08:00 - 22:00",
+    "comments": [
+      {
+        "user": "User 184",
+        "comment": "Cảnh đẹp xuất sắc.",
+        "rating": 4.0,
+        "date": "2025-12-12T18:15:43.453417",
+        "images": []
+      },
+      {
+        "user": "User 680",
+        "comment": "Đồ ăn ngon, giá hợp lý.",
+        "rating": 4.0,
+        "date": "2025-12-12T18:15:43.453444",
+        "images": []
+      },
+      {
+        "user": "User 500",
+        "comment": "Cảnh đẹp xuất sắc.",
+        "rating": 5.0,
+        "date": "2025-12-12T18:15:43.453456",
+        "images": []
+      },
+      {
+        "user": "User 796",
+        "comment": "Cảnh đẹp xuất sắc.",
+        "rating": 5.0,
+        "date": "2025-12-12T18:15:43.453468",
+        "images": []
+      },
+      {
+        "user": "User 946",
+        "comment": "Cảnh đẹp xuất sắc.",
+        "rating": 4.0,
+        "date": "2025-12-12T18:15:43.453477",
+        "images": []
+      }
+    ]
+  },
+  {
+    "id": "3",
+    "name": "Văn Miếu Quốc Tử Giám",
+    "province": "Hà Nội",
+    "description": "Khám phá Văn Miếu Quốc Tử Giám, một trong những điểm đến hấp dẫn nhất tại Hà Nội. Nơi đây nổi tiếng với phong cảnh tuyệt đẹp và những trải nghiệm văn hóa độc đáo.",
+    "location": {
+      "latitude": 21.0287903,
+      "longitude": 105.8359533,
+      "address": "Văn Miếu - Quốc Tử Giám, Phường Văn Miếu - Quốc Tử Giám, Thành phố Hà Nội, 11508, Việt Nam"
+    },
+    "images": [
+      "https://upload.wikimedia.org/wikipedia/commons/9/90/Khue_Van_Cac2.jpg"
+    ],
+    "category": "travel",
+    "rating": 4.5,
+    "reviewCount": 5,
+    "openHours": "08:00 - 22:00",
+    "comments": [
+      {
+        "user": "User 857",
+        "comment": "Đồ ăn ngon, giá hợp lý.",
+        "rating": 4.0,
+        "date": "2025-12-12T18:15:44.869385",
+        "images": []
+      },
+      {
+        "user": "User 948",
+        "comment": "Cảnh đẹp xuất sắc.",
+        "rating": 5.0,
+        "date": "2025-12-12T18:15:44.869412",
+        "images": []
+      },
+      {
+        "user": "User 276",
+        "comment": "Rất tuyệt vời!",
+        "rating": 5.0,
+        "date": "2025-12-12T18:15:44.869424",
+        "images": []
+      },
+      {
+        "user": "User 347",
+        "comment": "Rất tuyệt vời!",
+        "rating": 5.0,
+        "date": "2025-12-12T18:15:44.869435",
+        "images": []
+      },
+      {
+        "user": "User 325",
+        "comment": "Đồ ăn ngon, giá hợp lý.",
+        "rating": 5.0,
+        "date": "2025-12-12T18:15:44.869444",
+        "images": []
+      }
+    ]
+  },
+  {
+    "id": "4",
+    "name": "Vịnh Hạ Long",
+    "province": "Quảng Ninh",
+    "description": "Khám phá Vịnh Hạ Long, một trong những điểm đến hấp dẫn nhất tại Quảng Ninh. Nơi đây nổi tiếng với phong cảnh tuyệt đẹp và những trải nghiệm văn hóa độc đáo.",
+    "location": {
+      "latitude": 20.9084384,
+      "longitude": 107.0682782,
+      "address": "Vịnh Hạ Long, Hồng Gai, Tỉnh Quảng Ninh, 01000, Việt Nam"
+    },
+    "images": [
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Ha_Long_Bay_2.jpg/1200px-Ha_Long_Bay_2.jpg"
+    ],
+    "category": "travel",
+    "rating": 4.5,
+    "reviewCount": 2,
+    "openHours": "08:00 - 22:00",
+    "comments": [
+      {
+        "user": "User 124",
+        "comment": "Sẽ quay lại lần sau.",
+        "rating": 4.0,
+        "date": "2025-12-12T18:15:46.038071",
+        "images": []
+      },
+      {
+        "user": "User 775",
+        "comment": "Đồ ăn ngon, giá hợp lý.",
+        "rating": 4.0,
+        "date": "2025-12-12T18:15:46.038083",
+        "images": []
+      }
+    ]
+  },
+  {
+    "id": "5",
+    "name": "Yên Tử",
+    "province": "Quảng Ninh",
+    "description": "Khám phá Yên Tử, một trong những điểm đến hấp dẫn nhất tại Quảng Ninh. Nơi đây nổi tiếng với phong cảnh tuyệt đẹp và những trải nghiệm văn hóa độc đáo.",
+    "location": {
+      "latitude": 21.0442964,
+      "longitude": 106.7111181,
+      "address": "Phường Yên Tử, Tỉnh Quảng Ninh, Việt Nam"
+    },
+    "images": [
+      "https://ik.imagekit.io/tvlk/blog/2022/10/chua-yen-tu-1.jpg"
+    ],
+    "category": "travel",
+    "rating": 4.5,
+    "reviewCount": 4,
+    "openHours": "08:00 - 22:00",
+    "comments": [
+      {
+        "user": "User 596",
+        "comment": "Cảnh đẹp xuất sắc.",
+        "rating": 5.0,
+        "date": "2025-12-12T18:15:47.571308",
+        "images": []
+      },
+      {
+        "user": "User 316",
+        "comment": "Đồ ăn ngon, giá hợp lý.",
+        "rating": 5.0,
+        "date": "2025-12-12T18:15:47.571340",
+        "images": []
+      },
+      {
+        "user": "User 140",
+        "comment": "Rất tuyệt vời!",
+        "rating": 4.0,
+        "date": "2025-12-12T18:15:47.571355",
+        "images": []
+      },
+      {
+        "user": "User 389",
+        "comment": "Rất tuyệt vời!",
+        "rating": 4.0,
+        "date": "2025-12-12T18:15:47.571368",
+        "images": []
+      }
+    ]
+  },
+  {
+    "id": "6",
+    "name": "Fansipan",
+    "province": "Lào Cai",
+    "description": "Khám phá Fansipan, một trong những điểm đến hấp dẫn nhất tại Lào Cai. Nơi đây nổi tiếng với phong cảnh tuyệt đẹp và những trải nghiệm văn hóa độc đáo.",
+    "location": {
+      "latitude": 22.3066106,
+      "longitude": 103.7747781,
+      "address": "Fansipan, Đường mòn Trạm Tôn, Xã Tả Van, Tỉnh Lào Cai, Việt Nam"
+    },
+    "images": [
+      "https://cdn.vntrip.vn/cam-nang/wp-content/uploads/2017/07/fansipan-sapa.jpg"
+    ],
+    "category": "travel",
+    "rating": 4.5,
+    "reviewCount": 3,
+    "openHours": "08:00 - 22:00",
+    "comments": [
+      {
+        "user": "User 538",
+        "comment": "Rất tuyệt vời!",
+        "rating": 5.0,
+        "date": "2025-12-12T18:15:48.598294",
+        "images": []
+      },
+      {
+        "user": "User 630",
+        "comment": "Sẽ quay lại lần sau.",
+        "rating": 4.0,
+        "date": "2025-12-12T18:15:48.598316",
+        "images": []
+      },
+      {
+        "user": "User 328",
+        "comment": "Rất tuyệt vời!",
+        "rating": 5.0,
+        "date": "2025-12-12T18:15:48.598326",
+        "images": []
+      }
+    ]
+  },
+  {
+    "id": "7",
+    "name": "Bản Cát Cát",
+    "province": "Lào Cai",
+    "description": "Khám phá Bản Cát Cát, một trong những điểm đến hấp dẫn nhất tại Lào Cai. Nơi đây nổi tiếng với phong cảnh tuyệt đẹp và những trải nghiệm văn hóa độc đáo.",
+    "location": {
+      "latitude": 16.0,
+      "longitude": 108.0,
+      "address": "Lào Cai, Việt Nam (Địa chỉ đang cập nhật)"
+    },
+    "images": [
+      "https://file3.qdnd.vn/data/images/0/2023/04/24/vanyen/catcat1.jpg"
+    ],
+    "category": "travel",
+    "rating": 4.5,
+    "reviewCount": 2,
+    "openHours": "08:00 - 22:00",
+    "comments": [
+      {
+        "user": "User 997",
+        "comment": "Sẽ quay lại lần sau.",
+        "rating": 4.0,
+        "date": "2025-12-12T18:15:50.541896",
+        "images": []
+      },
+      {
+        "user": "User 260",
+        "comment": "Sẽ quay lại lần sau.",
+        "rating": 5.0,
+        "date": "2025-12-12T18:15:50.541903",
+        "images": []
+      }
+    ]
+  },
+  {
+    "id": "8",
+    "name": "Tràng An",
+    "province": "Ninh Bình",
+    "description": "Khám phá Tràng An, một trong những điểm đến hấp dẫn nhất tại Ninh Bình. Nơi đây nổi tiếng với phong cảnh tuyệt đẹp và những trải nghiệm văn hóa độc đáo.",
+    "location": {
+      "latitude": 20.259432,
+      "longitude": 105.9131607,
+      "address": "Tràng An, Phường Tây Hoa Lư, Tỉnh Ninh Bình, 08251, Việt Nam"
+    },
+    "images": [
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Trang_An_Scenic_Landscape_Complex.jpg/1200px-Trang_An_Scenic_Landscape_Complex.jpg"
+    ],
+    "category": "travel",
+    "rating": 4.5,
+    "reviewCount": 5,
+    "openHours": "08:00 - 22:00",
+    "comments": [
+      {
+        "user": "User 566",
+        "comment": "Cảnh đẹp xuất sắc.",
+        "rating": 4.0,
+        "date": "2025-12-12T18:15:51.567585",
+        "images": []
+      },
+      {
+        "user": "User 909",
+        "comment": "Rất tuyệt vời!",
+        "rating": 4.0,
+        "date": "2025-12-12T18:15:51.567607",
+        "images": []
+      },
+      {
+        "user": "User 225",
+        "comment": "Sẽ quay lại lần sau.",
+        "rating": 4.0,
+        "date": "2025-12-12T18:15:51.567616",
+        "images": []
+      },
+      {
+        "user": "User 915",
+        "comment": "Rất tuyệt vời!",
+        "rating": 4.0,
+        "date": "2025-12-12T18:15:51.567625",
+        "images": []
+      },
+      {
+        "user": "User 944",
+        "comment": "Rất tuyệt vời!",
+        "rating": 5.0,
+        "date": "2025-12-12T18:15:51.567662",
+        "images": []
+      }
+    ]
+  },
+  {
+    "id": "9",
+    "name": "Thác Bản Giốc",
+    "province": "Cao Bằng",
+    "description": "Khám phá Thác Bản Giốc, một trong những điểm đến hấp dẫn nhất tại Cao Bằng. Nơi đây nổi tiếng với phong cảnh tuyệt đẹp và những trải nghiệm văn hóa độc đáo.",
+    "location": {
+      "latitude": 22.8539003,
+      "longitude": 106.7232867,
+      "address": "Thác Bản Giốc, Xã Đàm Thủy, Tỉnh Cao Bằng, Việt Nam"
+    },
+    "images": [
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Ban_Gioc_Waterfall_in_Cao_Bang_Province.jpg/1200px-Ban_Gioc_Waterfall_in_Cao_Bang_Province.jpg"
+    ],
+    "category": "travel",
+    "rating": 4.5,
+    "reviewCount": 5,
+    "openHours": "08:00 - 22:00",
+    "comments": [
+      {
+        "user": "User 438",
+        "comment": "Sẽ quay lại lần sau.",
+        "rating": 5.0,
+        "date": "2025-12-12T18:15:52.912012",
+        "images": []
+      },
+      {
+        "user": "User 590",
+        "comment": "Đồ ăn ngon, giá hợp lý.",
+        "rating": 4.0,
+        "date": "2025-12-12T18:15:52.912022",
+        "images": []
+      },
+      {
+        "user": "User 258",
+        "comment": "Rất tuyệt vời!",
+        "rating": 4.0,
+        "date": "2025-12-12T18:15:52.912025",
+        "images": []
+      },
+      {
+        "user": "User 985",
+        "comment": "Đồ ăn ngon, giá hợp lý.",
+        "rating": 4.0,
+        "date": "2025-12-12T18:15:52.912028",
+        "images": []
+      },
+      {
+        "user": "User 108",
+        "comment": "Cảnh đẹp xuất sắc.",
+        "rating": 5.0,
+        "date": "2025-12-12T18:15:52.912031",
+        "images": []
+      }
+    ]
+  },
+  {
+    "id": "10",
+    "name": "Bà Nà Hills",
+    "province": "Đà Nẵng",
+    "description": "Khám phá Bà Nà Hills, một trong những điểm đến hấp dẫn nhất tại Đà Nẵng. Nơi đây nổi tiếng với phong cảnh tuyệt đẹp và những trải nghiệm văn hóa độc đáo.",
+    "location": {
+      "latitude": 15.9956239,
+      "longitude": 107.989389,
+      "address": "Sun World Bà Nà Hills, Wine Cellar, Xã Bà Nà, Thành phố Đà Nẵng, Việt Nam"
+    },
+    "images": [
+      "https://ik.imagekit.io/tvlk/blog/2022/11/ba-na-hills-1.jpg"
+    ],
+    "category": "travel",
+    "rating": 4.5,
+    "reviewCount": 4,
+    "openHours": "08:00 - 22:00",
+    "comments": [
+      {
+        "user": "User 356",
+        "comment": "Rất tuyệt vời!",
+        "rating": 4.0,
+        "date": "2025-12-12T18:15:54.113699",
+        "images": []
+      },
+      {
+        "user": "User 144",
+        "comment": "Đồ ăn ngon, giá hợp lý.",
+        "rating": 5.0,
+        "date": "2025-12-12T18:15:54.113710",
+        "images": []
+      },
+      {
+        "user": "User 400",
+        "comment": "Đồ ăn ngon, giá hợp lý.",
+        "rating": 5.0,
+        "date": "2025-12-12T18:15:54.113714",
+        "images": []
+      },
+      {
+        "user": "User 256",
+        "comment": "Rất tuyệt vời!",
+        "rating": 4.0,
+        "date": "2025-12-12T18:15:54.113717",
+        "images": []
+      }
+    ]
+  },
+  {
+    "id": "11",
+    "name": "Cầu Rồng",
+    "province": "Đà Nẵng",
+    "description": "Khám phá Cầu Rồng, một trong những điểm đến hấp dẫn nhất tại Đà Nẵng. Nơi đây nổi tiếng với phong cảnh tuyệt đẹp và những trải nghiệm văn hóa độc đáo.",
+    "location": {
+      "latitude": 16.0611682,
+      "longitude": 108.2278968,
+      "address": "Cầu Rồng, Phước Ninh, Phường Hải Châu, Thành phố Đà Nẵng, 02363, Việt Nam"
+    },
+    "images": [
+      "https://danangfantasticity.com/wp-content/uploads/2015/05/cau-rong-da-nang-01.jpg"
+    ],
+    "category": "travel",
+    "rating": 4.5,
+    "reviewCount": 3,
+    "openHours": "08:00 - 22:00",
+    "comments": [
+      {
+        "user": "User 693",
+        "comment": "Rất tuyệt vời!",
+        "rating": 4.0,
+        "date": "2025-12-12T18:15:55.664002",
+        "images": []
+      },
+      {
+        "user": "User 383",
+        "comment": "Cảnh đẹp xuất sắc.",
+        "rating": 4.0,
+        "date": "2025-12-12T18:15:55.664034",
+        "images": []
+      },
+      {
+        "user": "User 872",
+        "comment": "Cảnh đẹp xuất sắc.",
+        "rating": 5.0,
+        "date": "2025-12-12T18:15:55.664048",
+        "images": []
+      }
+    ]
+  },
+  {
+    "id": "12",
+    "name": "Phố cổ Hội An",
+    "province": "Quảng Nam",
+    "description": "Khám phá Phố cổ Hội An, một trong những điểm đến hấp dẫn nhất tại Quảng Nam. Nơi đây nổi tiếng với phong cảnh tuyệt đẹp và những trải nghiệm văn hóa độc đáo.",
+    "location": {
+      "latitude": 15.8683304,
+      "longitude": 108.3502537,
+      "address": "Gratitude Vietnam Retreat Center, 486, Nguyễn Tri Phương, Phố cổ Hội An, Cẩm Nam, Phường Hội An, Thành phố Đà Nẵng, 64000, Việt Nam"
+    },
+    "images": [
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Hoi_An_Ancient_Town.jpg/1200px-Hoi_An_Ancient_Town.jpg"
+    ],
+    "category": "travel",
+    "rating": 4.5,
+    "reviewCount": 4,
+    "openHours": "08:00 - 22:00",
+    "comments": [
+      {
+        "user": "User 603",
+        "comment": "Cảnh đẹp xuất sắc.",
+        "rating": 4.0,
+        "date": "2025-12-12T18:15:56.689039",
+        "images": []
+      },
+      {
+        "user": "User 609",
+        "comment": "Rất tuyệt vời!",
+        "rating": 4.0,
+        "date": "2025-12-12T18:15:56.689065",
+        "images": []
+      },
+      {
+        "user": "User 170",
+        "comment": "Cảnh đẹp xuất sắc.",
+        "rating": 5.0,
+        "date": "2025-12-12T18:15:56.689077",
+        "images": []
+      },
+      {
+        "user": "User 316",
+        "comment": "Cảnh đẹp xuất sắc.",
+        "rating": 4.0,
+        "date": "2025-12-12T18:15:56.689087",
+        "images": []
+      }
+    ]
+  },
+  {
+    "id": "13",
+    "name": "Đại Nội Huế",
+    "province": "Thừa Thiên Huế",
+    "description": "Khám phá Đại Nội Huế, một trong những điểm đến hấp dẫn nhất tại Thừa Thiên Huế. Nơi đây nổi tiếng với phong cảnh tuyệt đẹp và những trải nghiệm văn hóa độc đáo.",
+    "location": {
+      "latitude": 16.4689726,
+      "longitude": 107.5781266,
+      "address": "Hoàng Thành Huế, Sân Đại Triều Nghi, Đông Ba, Phú Xuân, Phường Phú Xuân, Thành phố Huế, 54000, Việt Nam"
+    },
+    "images": [
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Ngo_Mon_Hue_2012.jpg/1200px-Ngo_Mon_Hue_2012.jpg"
+    ],
+    "category": "travel",
+    "rating": 4.5,
+    "reviewCount": 2,
+    "openHours": "08:00 - 22:00",
+    "comments": [
+      {
+        "user": "User 108",
+        "comment": "Sẽ quay lại lần sau.",
+        "rating": 4.0,
+        "date": "2025-12-12T18:15:58.332517",
+        "images": []
+      },
+      {
+        "user": "User 228",
+        "comment": "Sẽ quay lại lần sau.",
+        "rating": 4.0,
+        "date": "2025-12-12T18:15:58.332526",
+        "images": []
+      }
+    ]
+  },
+  {
+    "id": "14",
+    "name": "Hang Sơn Đoòng",
+    "province": "Quảng Bình",
+    "description": "Khám phá Hang Sơn Đoòng, một trong những điểm đến hấp dẫn nhất tại Quảng Bình. Nơi đây nổi tiếng với phong cảnh tuyệt đẹp và những trải nghiệm văn hóa độc đáo.",
+    "location": {
+      "latitude": 16.0,
+      "longitude": 108.0,
+      "address": "Quảng Bình, Việt Nam (Địa chỉ đang cập nhật)"
+    },
+    "images": [
+      "https://cdn.tuoitre.vn/thumb_w/730/2020/6/17/son-doong-cave-15923640237731776785055.jpg"
+    ],
+    "category": "travel",
+    "rating": 4.5,
+    "reviewCount": 4,
+    "openHours": "08:00 - 22:00",
+    "comments": [
+      {
+        "user": "User 158",
+        "comment": "Đồ ăn ngon, giá hợp lý.",
+        "rating": 4.0,
+        "date": "2025-12-12T18:15:59.146431",
+        "images": []
+      },
+      {
+        "user": "User 912",
+        "comment": "Cảnh đẹp xuất sắc.",
+        "rating": 4.0,
+        "date": "2025-12-12T18:15:59.146463",
+        "images": []
+      },
+      {
+        "user": "User 445",
+        "comment": "Rất tuyệt vời!",
+        "rating": 5.0,
+        "date": "2025-12-12T18:15:59.146475",
+        "images": []
+      },
+      {
+        "user": "User 358",
+        "comment": "Cảnh đẹp xuất sắc.",
+        "rating": 5.0,
+        "date": "2025-12-12T18:15:59.146486",
+        "images": []
+      }
+    ]
+  },
+  {
+    "id": "15",
+    "name": "Eo Gió",
+    "province": "Bình Định",
+    "description": "Khám phá Eo Gió, một trong những điểm đến hấp dẫn nhất tại Bình Định. Nơi đây nổi tiếng với phong cảnh tuyệt đẹp và những trải nghiệm văn hóa độc đáo.",
+    "location": {
+      "latitude": 16.0,
+      "longitude": 108.0,
+      "address": "Bình Định, Việt Nam (Địa chỉ đang cập nhật)"
+    },
+    "images": [
+      "https://vcdn1-dulich.vnecdn.net/2020/06/17/eo-gio-quy-nhon-1-1592388056.jpg?w=1200&h=0&q=100&dpr=1&fit=crop&s=Zq0wP1j6q1j6q1j6q1j6q1"
+    ],
+    "category": "travel",
+    "rating": 4.5,
+    "reviewCount": 3,
+    "openHours": "08:00 - 22:00",
+    "comments": [
+      {
+        "user": "User 299",
+        "comment": "Đồ ăn ngon, giá hợp lý.",
+        "rating": 4.0,
+        "date": "2025-12-12T18:16:00.681431",
+        "images": []
+      },
+      {
+        "user": "User 501",
+        "comment": "Rất tuyệt vời!",
+        "rating": 5.0,
+        "date": "2025-12-12T18:16:00.681460",
+        "images": []
+      },
+      {
+        "user": "User 946",
+        "comment": "Cảnh đẹp xuất sắc.",
+        "rating": 5.0,
+        "date": "2025-12-12T18:16:00.681473",
+        "images": []
+      }
+    ]
+  },
+  {
+    "id": "16",
+    "name": "Hồ Xuân Hương Đà Lạt",
+    "province": "Lâm Đồng",
+    "description": "Khám phá Hồ Xuân Hương Đà Lạt, một trong những điểm đến hấp dẫn nhất tại Lâm Đồng. Nơi đây nổi tiếng với phong cảnh tuyệt đẹp và những trải nghiệm văn hóa độc đáo.",
+    "location": {
+      "latitude": 11.9362259,
+      "longitude": 108.4458183,
+      "address": "Phòng Vé Máy Bay Vietnam Airlines, Hồ Tùng Mậu, Ấp Xuân An, Đà Lạt, Phường Xuân Hương - Đà Lạt, Tỉnh Lâm Đồng, 02633, Việt Nam"
+    },
+    "images": [
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Ho_Xuan_Huong_Da_Lat.jpg/1200px-Ho_Xuan_Huong_Da_Lat.jpg"
+    ],
+    "category": "travel",
+    "rating": 4.5,
+    "reviewCount": 2,
+    "openHours": "08:00 - 22:00",
+    "comments": [
+      {
+        "user": "User 877",
+        "comment": "Rất tuyệt vời!",
+        "rating": 5.0,
+        "date": "2025-12-12T18:16:01.705339",
+        "images": []
+      },
+      {
+        "user": "User 599",
+        "comment": "Đồ ăn ngon, giá hợp lý.",
+        "rating": 5.0,
+        "date": "2025-12-12T18:16:01.705364",
+        "images": []
+      }
+    ]
+  },
+  {
+    "id": "17",
+    "name": "Langbiang",
+    "province": "Lâm Đồng",
+    "description": "Khám phá Langbiang, một trong những điểm đến hấp dẫn nhất tại Lâm Đồng. Nơi đây nổi tiếng với phong cảnh tuyệt đẹp và những trải nghiệm văn hóa độc đáo.",
+    "location": {
+      "latitude": 12.0472573,
+      "longitude": 108.4405826,
+      "address": "Núi Lang Biang, Phường Lang Biang - Đà Lạt, Tỉnh Lâm Đồng, Việt Nam"
+    },
+    "images": [
+      "https://dulichdalat.pro/wp-content/uploads/2020/09/nui-langbiang.jpg"
+    ],
+    "category": "travel",
+    "rating": 4.5,
+    "reviewCount": 5,
+    "openHours": "08:00 - 22:00",
+    "comments": [
+      {
+        "user": "User 429",
+        "comment": "Cảnh đẹp xuất sắc.",
+        "rating": 5.0,
+        "date": "2025-12-12T18:16:03.116404",
+        "images": []
+      },
+      {
+        "user": "User 128",
+        "comment": "Cảnh đẹp xuất sắc.",
+        "rating": 5.0,
+        "date": "2025-12-12T18:16:03.116411",
+        "images": []
+      },
+      {
+        "user": "User 455",
+        "comment": "Sẽ quay lại lần sau.",
+        "rating": 5.0,
+        "date": "2025-12-12T18:16:03.116414",
+        "images": []
+      },
+      {
+        "user": "User 538",
+        "comment": "Sẽ quay lại lần sau.",
+        "rating": 4.0,
+        "date": "2025-12-12T18:16:03.116416",
+        "images": []
+      },
+      {
+        "user": "User 527",
+        "comment": "Sẽ quay lại lần sau.",
+        "rating": 4.0,
+        "date": "2025-12-12T18:16:03.116418",
+        "images": []
+      }
+    ]
+  },
+  {
+    "id": "18",
+    "name": "Chợ Bến Thành",
+    "province": "TP.HCM",
+    "description": "Khám phá Chợ Bến Thành, một trong những điểm đến hấp dẫn nhất tại TP.HCM. Nơi đây nổi tiếng với phong cảnh tuyệt đẹp và những trải nghiệm văn hóa độc đáo.",
+    "location": {
+      "latitude": 10.7725301,
+      "longitude": 106.6980365,
+      "address": "Chợ Bến Thành, Công trường Quách Thị Trang, Khu phố 6, Phường Bến Thành, Thủ Đức, Thành phố Hồ Chí Minh, 71009, Việt Nam"
+    },
+    "images": [
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Ben_Thanh_Market_2024.jpg/1200px-Ben_Thanh_Market_2024.jpg"
+    ],
+    "category": "travel",
+    "rating": 4.5,
+    "reviewCount": 2,
+    "openHours": "08:00 - 22:00",
+    "comments": [
+      {
+        "user": "User 166",
+        "comment": "Cảnh đẹp xuất sắc.",
+        "rating": 4.0,
+        "date": "2025-12-12T18:16:04.348364",
+        "images": []
+      },
+      {
+        "user": "User 848",
+        "comment": "Đồ ăn ngon, giá hợp lý.",
+        "rating": 4.0,
+        "date": "2025-12-12T18:16:04.348388",
+        "images": []
+      }
+    ]
+  },
+  {
+    "id": "19",
+    "name": "Dinh Độc Lập",
+    "province": "TP.HCM",
+    "description": "Khám phá Dinh Độc Lập, một trong những điểm đến hấp dẫn nhất tại TP.HCM. Nơi đây nổi tiếng với phong cảnh tuyệt đẹp và những trải nghiệm văn hóa độc đáo.",
+    "location": {
+      "latitude": 10.7770348,
+      "longitude": 106.695488,
+      "address": "Dinh Độc Lập, 135, Nam Kỳ Khởi Nghĩa, Khu phố 7, Phường Bến Thành, Thủ Đức, Thành phố Hồ Chí Minh, 71009, Việt Nam"
+    },
+    "images": [
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Reunification_Palace.jpg/1200px-Reunification_Palace.jpg"
+    ],
+    "category": "travel",
+    "rating": 4.5,
+    "reviewCount": 5,
+    "openHours": "08:00 - 22:00",
+    "comments": [
+      {
+        "user": "User 347",
+        "comment": "Cảnh đẹp xuất sắc.",
+        "rating": 5.0,
+        "date": "2025-12-12T18:16:07.336605",
+        "images": []
+      },
+      {
+        "user": "User 264",
+        "comment": "Sẽ quay lại lần sau.",
+        "rating": 4.0,
+        "date": "2025-12-12T18:16:07.336622",
+        "images": []
+      },
+      {
+        "user": "User 710",
+        "comment": "Đồ ăn ngon, giá hợp lý.",
+        "rating": 4.0,
+        "date": "2025-12-12T18:16:07.336629",
+        "images": []
+      },
+      {
+        "user": "User 238",
+        "comment": "Cảnh đẹp xuất sắc.",
+        "rating": 5.0,
+        "date": "2025-12-12T18:16:07.336636",
+        "images": []
+      },
+      {
+        "user": "User 181",
+        "comment": "Đồ ăn ngon, giá hợp lý.",
+        "rating": 4.0,
+        "date": "2025-12-12T18:16:07.336641",
+        "images": []
+      }
+    ]
+  },
+  {
+    "id": "20",
+    "name": "Phố đi bộ Nguyễn Huệ",
+    "province": "TP.HCM",
+    "description": "Khám phá Phố đi bộ Nguyễn Huệ, một trong những điểm đến hấp dẫn nhất tại TP.HCM. Nơi đây nổi tiếng với phong cảnh tuyệt đẹp và những trải nghiệm văn hóa độc đáo.",
+    "location": {
+      "latitude": 10.7737196,
+      "longitude": 106.7040457,
+      "address": "Phố đi bộ Nguyễn Huệ, Khu phố 8, Phường Sài Gòn, Thủ Đức, Thành phố Hồ Chí Minh, 71006, Việt Nam"
+    },
+    "images": [
+      "https://vcdn1-vnexpress.vnecdn.net/2021/01/26/Pho-di-bo-Nguyen-Hue-1-1611634734.jpg?w=1200&h=0&q=100&dpr=1&fit=crop&s=Zq0wP1j6q1j6q1j6q1j6q1"
+    ],
+    "category": "travel",
+    "rating": 4.5,
+    "reviewCount": 3,
+    "openHours": "08:00 - 22:00",
+    "comments": [
+      {
+        "user": "User 986",
+        "comment": "Sẽ quay lại lần sau.",
+        "rating": 5.0,
+        "date": "2025-12-12T18:16:08.360657",
+        "images": []
+      },
+      {
+        "user": "User 907",
+        "comment": "Rất tuyệt vời!",
+        "rating": 4.0,
+        "date": "2025-12-12T18:16:08.360665",
+        "images": []
+      },
+      {
+        "user": "User 590",
+        "comment": "Sẽ quay lại lần sau.",
+        "rating": 5.0,
+        "date": "2025-12-12T18:16:08.360668",
+        "images": []
+      }
+    ]
+  },
+  {
+    "id": "21",
+    "name": "Chợ nổi Cái Răng",
+    "province": "Cần Thơ",
+    "description": "Khám phá Chợ nổi Cái Răng, một trong những điểm đến hấp dẫn nhất tại Cần Thơ. Nơi đây nổi tiếng với phong cảnh tuyệt đẹp và những trải nghiệm văn hóa độc đáo.",
+    "location": {
+      "latitude": 10.0023957,
+      "longitude": 105.7443925,
+      "address": "Chợ nổi Cái Răng, Nguyễn Việt Dũng, Phường Cái Răng, Thành phố Cần Thơ, 94908, Việt Nam"
+    },
+    "images": [
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Cai_Rang_Floating_Market.jpg/1200px-Cai_Rang_Floating_Market.jpg"
+    ],
+    "category": "travel",
+    "rating": 4.5,
+    "reviewCount": 4,
+    "openHours": "08:00 - 22:00",
+    "comments": [
+      {
+        "user": "User 804",
+        "comment": "Sẽ quay lại lần sau.",
+        "rating": 4.0,
+        "date": "2025-12-12T18:16:10.000519",
+        "images": []
+      },
+      {
+        "user": "User 581",
+        "comment": "Đồ ăn ngon, giá hợp lý.",
+        "rating": 4.0,
+        "date": "2025-12-12T18:16:10.000543",
+        "images": []
+      },
+      {
+        "user": "User 904",
+        "comment": "Rất tuyệt vời!",
+        "rating": 4.0,
+        "date": "2025-12-12T18:16:10.000553",
+        "images": []
+      },
+      {
+        "user": "User 884",
+        "comment": "Rất tuyệt vời!",
+        "rating": 5.0,
+        "date": "2025-12-12T18:16:10.000562",
+        "images": []
+      }
+    ]
+  },
+  {
+    "id": "22",
+    "name": "VinWonders Phú Quốc",
+    "province": "Kiên Giang",
+    "description": "Khám phá VinWonders Phú Quốc, một trong những điểm đến hấp dẫn nhất tại Kiên Giang. Nơi đây nổi tiếng với phong cảnh tuyệt đẹp và những trải nghiệm văn hóa độc đáo.",
+    "location": {
+      "latitude": 16.0,
+      "longitude": 108.0,
+      "address": "Kiên Giang, Việt Nam (Địa chỉ đang cập nhật)"
+    },
+    "images": [
+      "https://ik.imagekit.io/tvlk/blog/2022/03/vinwonders-phu-quoc-1.jpg"
+    ],
+    "category": "travel",
+    "rating": 4.5,
+    "reviewCount": 2,
+    "openHours": "08:00 - 22:00",
+    "comments": [
+      {
+        "user": "User 993",
+        "comment": "Sẽ quay lại lần sau.",
+        "rating": 5.0,
+        "date": "2025-12-12T18:16:11.033035",
+        "images": []
+      },
+      {
+        "user": "User 481",
+        "comment": "Rất tuyệt vời!",
+        "rating": 5.0,
+        "date": "2025-12-12T18:16:11.033056",
+        "images": []
+      }
+    ]
+  },
+  {
+    "id": "23",
+    "name": "Núi Bà Đen",
+    "province": "Tây Ninh",
+    "description": "Khám phá Núi Bà Đen, một trong những điểm đến hấp dẫn nhất tại Tây Ninh. Nơi đây nổi tiếng với phong cảnh tuyệt đẹp và những trải nghiệm văn hóa độc đáo.",
+    "location": {
+      "latitude": 11.3823834,
+      "longitude": 106.170221,
+      "address": "Núi Bà Đen, Phường Bình Minh, Tỉnh Tây Ninh, Việt Nam"
+    },
+    "images": [
+      "https://cdn.vntrip.vn/cam-nang/wp-content/uploads/2017/09/nui-ba-den-tay-ninh.jpg"
+    ],
+    "category": "travel",
+    "rating": 4.5,
+    "reviewCount": 2,
+    "openHours": "08:00 - 22:00",
+    "comments": [
+      {
+        "user": "User 484",
+        "comment": "Rất tuyệt vời!",
+        "rating": 4.0,
+        "date": "2025-12-12T18:16:12.559800",
+        "images": []
+      },
+      {
+        "user": "User 852",
+        "comment": "Rất tuyệt vời!",
+        "rating": 5.0,
+        "date": "2025-12-12T18:16:12.559809",
+        "images": []
+      }
+    ]
+  }
+]

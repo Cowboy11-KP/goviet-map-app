@@ -1,15 +1,19 @@
 // models/place_model.dart
+import 'package:goviet_map_app/models/location_model.dart';
+
 class Comment {
   final String user;
   final String comment;
   final double rating;
   final DateTime date;
+  final List<String> images;
 
   Comment({
     required this.user,
     required this.comment,
     required this.rating,
     required this.date,
+    required this.images,
   });
 
   factory Comment.fromMap(Map<String, dynamic> map) {
@@ -18,6 +22,9 @@ class Comment {
       comment: map['comment'],
       rating: (map['rating'] as num).toDouble(),
       date: DateTime.parse(map['date']),
+      images: map['images'] != null 
+          ? (map['images'] as List).map((e) => e.toString()).toList() 
+          : [],
     );
   }
 
@@ -36,9 +43,8 @@ class Place {
   final String name;
   final String province;
   final String description;
-  final double latitude;
-  final double longitude;
-  final String image;
+  final PlaceLocation location;
+  final List<String> images;
   final String category; // beach, mountain, pagoda, city, waterfall…
   final double rating; // average rating (1–5)
   final int reviewCount;
@@ -50,9 +56,8 @@ class Place {
     required this.name,
     required this.province,
     required this.description,
-    required this.latitude,
-    required this.longitude,
-    required this.image,
+    required this.location,
+    required this.images,
     required this.category,
     required this.rating,
     required this.reviewCount,
@@ -66,9 +71,12 @@ class Place {
       name: map['name'],
       province: map['province'],
       description: map['description'],
-      latitude: (map['latitude'] as num).toDouble(),
-      longitude: (map['longitude'] as num).toDouble(),
-      image: map['image'],
+      
+      location: PlaceLocation.fromMap(map['location'] ?? {}),
+
+      images: map['images'] != null 
+        ? (map['images'] as List).map((e) => e.toString()).toList() 
+        : [],
       category: map['category'],
       rating: (map['rating'] as num).toDouble(),
       reviewCount: map['reviewCount'],
@@ -78,16 +86,15 @@ class Place {
           .toList(),
     );
   }
-
+  
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'name': name,
       'province': province,
       'description': description,
-      'latitude': latitude,
-      'longitude': longitude,
-      'image': image,
+      'location': location.toMap(),
+      'images': images,
       'category': category,
       'rating': rating,
       'reviewCount': reviewCount,
