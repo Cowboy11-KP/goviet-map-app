@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:goviet_map_app/viewmodels/auth_service.dart';
 import 'package:goviet_map_app/views/Home/root_screen.dart.dart';
 
 
@@ -11,14 +12,94 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController(); // Dùng cho đăng ký
+  final TextEditingController _confirmPassController = TextEditingController(); // Dùng cho đăng ký
+
+  final AuthService _authService = AuthService();
+  
   bool _hidePassword = true;
   bool _rememberPassword = false;
   bool _isLogin = true;
+  bool _isLoading = false;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passController.dispose();
+    _nameController.dispose();
+    _confirmPassController.dispose();
+    super.dispose();
+  }
 
   void _toggleForm(bool isLogin) {
     setState(() {
       _isLogin = isLogin;
+      // Clear form khi chuyển tab để tránh nhầm lẫn
+      _emailController.clear();
+      _passController.clear();
+      _nameController.clear();
+      _confirmPassController.clear();
     });
+  }
+
+  // --- HÀM XỬ LÝ ĐĂNG NHẬP / ĐĂNG KÝ EMAIL ---
+  void _handleEmailAuth() async {
+    // Validate cơ bản
+    if (_emailController.text.isEmpty || _passController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Vui lòng nhập đầy đủ thông tin")));
+      return;
+    }
+
+    if (!_isLogin) {
+      // Logic riêng cho Đăng ký
+      if (_passController.text != _confirmPassController.text) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Mật khẩu nhập lại không khớp")));
+        return;
+      }
+    }
+
+    setState(() => _isLoading = true); // Bắt đầu load
+
+    try {
+      final user = _isLogin
+          ? await _authService.signInWithEmail(_emailController.text.trim(), _passController.text.trim())
+          : await _authService.signUpWithEmail(_emailController.text.trim(), _passController.text.trim());
+
+      if (user != null && mounted) {
+         // Thành công -> Chuyển màn hình
+         Navigator.pushReplacement(
+            context, 
+            MaterialPageRoute(builder: (context) => RootScreen())
+          );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+      }
+    } finally {
+      if (mounted) setState(() => _isLoading = false); // Tắt load
+    }
+  }
+
+  // --- HÀM XỬ LÝ GOOGLE ---
+  void _handleGoogleLogin() async {
+    setState(() => _isLoading = true);
+    try {
+      final user = await _authService.signInWithGoogle();
+      if (user != null && mounted) {
+        Navigator.pushReplacement(
+            context, 
+            MaterialPageRoute(builder: (context) => RootScreen())
+        );
+      }
+    } catch (e) {
+      // Lỗi hoặc user hủy login thì không làm gì hoặc hiện thông báo nhẹ
+      print("Google Login Error: $e");
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
   }
 
   @override
@@ -77,12 +158,7 @@ class _SignInScreenState extends State<SignInScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: (){
-                  Navigator.push(
-                    context, 
-                    MaterialPageRoute(builder: (context) => RootScreen())
-                  );
-                }, 
+                onPressed: _isLoading ? null : _handleEmailAuth, 
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.all(12),
                   backgroundColor: Color(0xff659B4D),
@@ -127,7 +203,7 @@ class _SignInScreenState extends State<SignInScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: (){}, 
+                onPressed: _isLoading ? null : _handleGoogleLogin, 
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.all(12),
                   shape: RoundedRectangleBorder(
@@ -161,9 +237,10 @@ class _SignInScreenState extends State<SignInScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Gmail'),
+          const Text('Email'),
           const SizedBox(height: 4),
           TextFormField(
+            controller: _emailController,
             decoration: InputDecoration(
               hintText: 'Nhập gmail của bạn',
               contentPadding: const EdgeInsets.all(8),
@@ -181,6 +258,7 @@ class _SignInScreenState extends State<SignInScreen> {
           const Text('Mật khẩu'),
           const SizedBox(height: 4),
           TextFormField(
+            controller: _passController,
             obscureText: _hidePassword,
             decoration: InputDecoration(
               hintText: 'Nhập mật khẩu của bạn',
@@ -252,6 +330,7 @@ class _SignInScreenState extends State<SignInScreen> {
           const Text('Họ và tên'),
           const SizedBox(height: 4),
           TextFormField(
+            controller: _nameController,
             decoration: InputDecoration(
               hintText: 'Nhập tên của bạn',
               contentPadding: const EdgeInsets.all(8),
@@ -266,9 +345,10 @@ class _SignInScreenState extends State<SignInScreen> {
             ),
           ),
           const SizedBox(height: 12),
-          const Text('Gmail'),
+          const Text('Email'),
           const SizedBox(height: 4),
           TextFormField(
+            controller: _emailController,
             decoration: InputDecoration(
               hintText: 'Nhập gmail của bạn',
               contentPadding: const EdgeInsets.all(8),
@@ -286,6 +366,7 @@ class _SignInScreenState extends State<SignInScreen> {
           const Text('Mật khẩu'),
           const SizedBox(height: 4),
           TextFormField(
+            controller: _passController,
             obscureText: _hidePassword,
             decoration: InputDecoration(
               hintText: 'Tạo mật khẩu',
@@ -315,6 +396,7 @@ class _SignInScreenState extends State<SignInScreen> {
           const Text('Nhập lại Mật khẩu'),
           const SizedBox(height: 4),
           TextFormField(
+            controller: _confirmPassController,
             obscureText: _hidePassword,
             decoration: InputDecoration(
               hintText: 'Nhập',

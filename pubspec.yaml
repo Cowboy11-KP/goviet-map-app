@@ -43,6 +43,9 @@ dependencies:
   flutter_map: ^8.2.2
   latlong2: ^0.9.1
   path_provider: ^2.1.5
+  firebase_core: ^4.2.1
+  google_sign_in: ^6.2.1
+  firebase_auth: ^6.1.2
 
 dev_dependencies:
   flutter_test:

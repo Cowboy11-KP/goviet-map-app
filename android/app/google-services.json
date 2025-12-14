@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "32324090592",
+    "project_id": "go-viet-26fa7",
+    "storage_bucket": "go-viet-26fa7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:32324090592:android:e32a5d86321cc716c66e85",
+        "android_client_info": {
+          "package_name": "com.example.goviet_map_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "32324090592-modfsbpaed6ana369lmm43s22320qluf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.goviet_map_app",
+            "certificate_hash": "0c484c1cbcd968776bd033195b51de8c240fe13a"
+          }
+        },
+        {
+          "client_id": "32324090592-h3flt2klh94v9ujpsbpvbntb7nsl7phd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJRB-sJQwEX65FZRqIOLSuYlzbcWCKc-0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "32324090592-h3flt2klh94v9ujpsbpvbntb7nsl7phd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
