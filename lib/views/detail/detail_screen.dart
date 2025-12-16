@@ -7,11 +7,13 @@ import 'package:goviet_map_app/viewmodels/comment_viewmodel.dart';
 class DetailScreen extends StatefulWidget {
   final Place place;
   final ScrollController? scrollController;
+  final VoidCallback? onDirectionsPressed;
 
   const DetailScreen({
     super.key, 
     required this.place, 
-    this.scrollController
+    this.scrollController,
+    this.onDirectionsPressed,     
   });
 
   @override
@@ -107,9 +109,29 @@ class _DetailScreenState extends State<DetailScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildActionButton(Icons.directions, "Dẫn đường", true),
-                _buildActionButton(Icons.call, "Gọi", false),
-                _buildActionButton(Icons.public, "Trang web", false),
+                _buildActionButton(
+                  icon: Icons.directions, 
+                  label: "Dẫn đường", 
+                  isPrimary: true,
+                  onTap: () {
+                    
+                    if (widget.onDirectionsPressed != null) {
+                      widget.onDirectionsPressed!();
+                      Navigator.pop(context); 
+                    }
+                  }
+                ),
+                _buildActionButton(
+                  icon: Icons.call, 
+                  label: "Dẫn đường", 
+                  isPrimary: false,
+                  
+                ),
+                _buildActionButton(
+                  icon: Icons.public, 
+                  label: "Dẫn đường", 
+                  isPrimary: false,
+                ),
               ],
             ),
             const SizedBox(height: 20),
@@ -267,26 +289,34 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  Widget _buildActionButton(IconData icon, String label, bool isPrimary) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: isPrimary ? primaryColor : Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: isPrimary ? primaryColor : Colors.grey.shade300),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, size: 18, color: isPrimary ? Colors.white : Colors.black87),
-          const SizedBox(width: 6),
-          Text(
-            label,
-            style: TextStyle(
-              color: isPrimary ? Colors.white : Colors.black87,
-              fontWeight: FontWeight.w600,
+  Widget _buildActionButton({
+    required IconData icon, 
+    required String label, 
+    required bool isPrimary, 
+    VoidCallback? onTap 
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        decoration: BoxDecoration(
+          color: isPrimary ? primaryColor : Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: isPrimary ? primaryColor : Colors.grey.shade300),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, size: 18, color: isPrimary ? Colors.white : Colors.black87),
+            const SizedBox(width: 6),
+            Text(
+              label,
+              style: TextStyle(
+                color: isPrimary ? Colors.white : Colors.black87,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
