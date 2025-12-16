@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:goviet_map_app/models/place_model.dart';
 
+import 'package:goviet_map_app/models/comment_model.dart';
+import 'package:goviet_map_app/viewmodels/comment_viewmodel.dart';
+
 class DetailScreen extends StatefulWidget {
   final Place place;
   final ScrollController? scrollController;
@@ -18,6 +21,21 @@ class DetailScreen extends StatefulWidget {
 class _DetailScreenState extends State<DetailScreen> {
   final Color primaryColor = const Color(0xFF659A48);
   final Color lightBgColor = const Color(0xFFF2F6F1);
+
+  final CommentViewModel _viewModel = CommentViewModel();
+
+  @override
+  void _showAddCommentSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // Cho phép full chiều cao và đẩy bởi bàn phím
+      backgroundColor: Colors.transparent,
+      builder: (context) => AddCommentSheet(
+        placeId: widget.place.id,
+        viewModel: _viewModel,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -155,8 +173,8 @@ class _DetailScreenState extends State<DetailScreen> {
               const SizedBox(height: 20),
             ],
 
-            // 7. Đánh giá (Hiện từ list comments trong model)
-            if (widget.place.comments.isNotEmpty) ...[
+            // 7. ĐÁNH GIÁ TỪ FIREBASE (Updated)
+            
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -164,24 +182,69 @@ class _DetailScreenState extends State<DetailScreen> {
                   Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey[600])
                 ],
               ),
+
               const SizedBox(height: 10),
+
               SizedBox(
-                height: 180,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: widget.place.comments.length,
-                  itemBuilder: (context, index) {
-                    final comment = widget.place.comments[index];
-                    return _buildReviewCard(comment); // Truyền data thật vào
+              height: 180,
+              // --- BẮT ĐẦU STREAM BUILDER ---
+              // Đây là nơi phép màu xảy ra: Lấy comment theo ID địa điểm
+              child: StreamBuilder<List<CommentModel>>(
+                stream: _viewModel.getComments(widget.place.id), 
+                  builder: (context, snapshot) {
+                    // 1. Đang tải
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    
+                    // 2. Có lỗi
+                    if (snapshot.hasError) {
+                      return Center(child: Text("Lỗi: ${snapshot.error}"));
+                    }
+
+                    final comments = snapshot.data ?? [];
+
+                    // 3. Không có dữ liệu
+                    if (comments.isEmpty) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(Icons.chat_bubble_outline, color: Colors.grey),
+                            Text("Chưa có đánh giá nào.", style: TextStyle(color: Colors.grey)),
+                          ],
+                        ),
+                      );
+                    }
+
+                    // 4. Có dữ liệu -> Hiển thị List
+                    return ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: comments.length,
+                      itemBuilder: (context, index) {
+                        final comment = comments[index];
+                        return _buildReviewCard(comment); // Truyền model mới vào
+                      },
+                    );
                   },
                 ),
+                // --- KẾT THÚC STREAM BUILDER ---
               ),
-            ] else 
-              const Text("Chưa có đánh giá nào.", style: TextStyle(fontStyle: FontStyle.italic, color: Colors.grey)),
-            
-            const SizedBox(height: 50),
-          ],
+              const SizedBox(height: 50),
+            ]
         ),
+      ),
+
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          // Kiểm tra đăng nhập (nếu cần thiết ở tầng UI)
+          // if (AuthService().currentUser == null) { ...báo lỗi... return; }
+          
+          _showAddCommentSheet(context);
+        },
+        backgroundColor: primaryColor,
+        icon: const Icon(Icons.edit, color: Colors.white),
+        label: const Text("Viết đánh giá", style: TextStyle(color: Colors.white)),
       ),
     );
   }
@@ -254,7 +317,7 @@ class _DetailScreenState extends State<DetailScreen> {
   }
 
   // Cập nhật để nhận dữ liệu thật từ Model Comment
-  Widget _buildReviewCard(Comment comment) {
+  Widget _buildReviewCard(CommentModel comment) {
     return Container(
       width: 280,
       margin: const EdgeInsets.only(right: 12),
@@ -275,12 +338,18 @@ class _DetailScreenState extends State<DetailScreen> {
               CircleAvatar(
                 radius: 12, 
                 backgroundColor: Colors.blue.shade100,
-                child: Text(comment.user.isNotEmpty ? comment.user[0].toUpperCase() : "?", style: const TextStyle(fontSize: 12)),
+                // Hiển thị avatar nếu có (từ Google Login chẳng hạn)
+                backgroundImage: comment.userAvatarUrl != null 
+                    ? NetworkImage(comment.userAvatarUrl!) 
+                    : null,
+                child: comment.userAvatarUrl == null 
+                    ? Text(comment.userName.isNotEmpty ? comment.userName[0].toUpperCase() : "?", style: const TextStyle(fontSize: 12)) 
+                    : null,
               ),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  comment.user,
+                  comment.userName,
                   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -289,8 +358,10 @@ class _DetailScreenState extends State<DetailScreen> {
           ),
           const SizedBox(height: 4),
           // Format ngày tháng đơn giản
-          Text("${comment.date.day}/${comment.date.month}/${comment.date.year}", 
-               style: const TextStyle(fontSize: 10, color: Colors.grey)),
+          Text(
+            "${comment.timestamp.day}/${comment.timestamp.month}/${comment.timestamp.year}", 
+            style: const TextStyle(fontSize: 10, color: Colors.grey)
+          ),
           const SizedBox(height: 4),
           Row(children: List.generate(5, (index) => Icon(
             index < comment.rating ? Icons.star : Icons.star_border, 
@@ -298,7 +369,7 @@ class _DetailScreenState extends State<DetailScreen> {
           )),
           const SizedBox(height: 6),
           Text(
-            comment.comment,
+            comment.content, 
             style: const TextStyle(fontSize: 12),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
@@ -320,6 +391,150 @@ class _DetailScreenState extends State<DetailScreen> {
                 ),
               )).toList(),
             )
+        ],
+      ),
+    );
+  }
+}
+
+// Widget hiển thị Form nhập liệu
+class AddCommentSheet extends StatefulWidget {
+  final String placeId;
+  final CommentViewModel viewModel;
+
+  const AddCommentSheet({
+    Key? key, 
+    required this.placeId, 
+    required this.viewModel
+  }) : super(key: key);
+
+  @override
+  State<AddCommentSheet> createState() => _AddCommentSheetState();
+}
+
+class _AddCommentSheetState extends State<AddCommentSheet> {
+  final TextEditingController _contentController = TextEditingController();
+  double _rating = 5.0; // Mặc định 5 sao
+  bool _isLoading = false;
+
+  @override
+  void dispose() {
+    _contentController.dispose();
+    super.dispose();
+  }
+
+  // Hàm xử lý gửi
+  void _handleSubmit() async {
+    final content = _contentController.text.trim();
+    if (content.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Vui lòng nhập nội dung đánh giá")),
+      );
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    // Gọi ViewModel để gửi lên Firebase
+    // Lưu ý: Đảm bảo ViewModel của bạn đã có hàm sendComment trả về bool
+    bool success = await widget.viewModel.sendComment(
+      placeId: widget.placeId,
+      content: content,
+      rating: _rating,
+      images: [], // Tạm thời để rỗng, nếu muốn thêm ảnh cần dùng image_picker
+    );
+
+    if (mounted) {
+      setState(() => _isLoading = false);
+      if (success) {
+        Navigator.pop(context); // Đóng BottomSheet
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Đã gửi đánh giá thành công!")),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Gửi thất bại. Vui lòng thử lại.")),
+        );
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Lấy chiều cao bàn phím để đẩy form lên
+    final bottomPadding = MediaQuery.of(context).viewInsets.bottom;
+
+    return Container(
+      padding: EdgeInsets.fromLTRB(16, 16, 16, bottomPadding + 16),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text("Viết đánh giá", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close)),
+            ],
+          ),
+          const Divider(),
+          
+          // 1. Chọn Sao
+          Center(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: List.generate(5, (index) {
+                return IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _rating = index + 1.0;
+                    });
+                  },
+                  icon: Icon(
+                    index < _rating ? Icons.star : Icons.star_border,
+                    color: Colors.amber,
+                    size: 32,
+                  ),
+                );
+              }),
+            ),
+          ),
+          
+          // 2. Ô nhập nội dung
+          const SizedBox(height: 10),
+          TextField(
+            controller: _contentController,
+            maxLines: 3,
+            decoration: InputDecoration(
+              hintText: "Chia sẻ trải nghiệm của bạn về địa điểm này...",
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              filled: true,
+              fillColor: Colors.grey[50],
+            ),
+          ),
+          
+          const SizedBox(height: 16),
+          
+          // 3. Nút Gửi
+          SizedBox(
+            width: double.infinity,
+            height: 50,
+            child: ElevatedButton(
+              onPressed: _isLoading ? null : _handleSubmit,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF659A48),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+              child: _isLoading 
+                ? const CircularProgressIndicator(color: Colors.white)
+                : const Text("Gửi đánh giá", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+            ),
+          ),
         ],
       ),
     );

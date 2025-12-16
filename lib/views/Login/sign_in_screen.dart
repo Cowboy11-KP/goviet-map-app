@@ -54,6 +54,13 @@ class _SignInScreenState extends State<SignInScreen> {
 
     if (!_isLogin) {
       // Logic riêng cho Đăng ký
+      if (_passController.text.length < 6) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Mật khẩu phải có ít nhất 6 ký tự.")),
+        );
+        return;
+      }
+
       if (_passController.text != _confirmPassController.text) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Mật khẩu nhập lại không khớp")));
         return;

@@ -1,42 +1,4 @@
-// models/place_model.dart
 import 'package:goviet_map_app/models/location_model.dart';
-
-class Comment {
-  final String user;
-  final String comment;
-  final double rating;
-  final DateTime date;
-  final List<String> images;
-
-  Comment({
-    required this.user,
-    required this.comment,
-    required this.rating,
-    required this.date,
-    required this.images,
-  });
-
-  factory Comment.fromMap(Map<String, dynamic> map) {
-    return Comment(
-      user: map['user'],
-      comment: map['comment'],
-      rating: (map['rating'] as num).toDouble(),
-      date: DateTime.parse(map['date']),
-      images: map['images'] != null 
-          ? (map['images'] as List).map((e) => e.toString()).toList() 
-          : [],
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'user': user,
-      'comment': comment,
-      'rating': rating,
-      'date': date.toIso8601String(),
-    };
-  }
-}
 
 class Place {
   final String id;
@@ -48,8 +10,7 @@ class Place {
   final String category; // beach, mountain, pagoda, city, waterfall…
   final double rating; // average rating (1–5)
   final int reviewCount;
-  final String openHours; // <--- mới thêm
-  final List<Comment> comments;
+  final String openHours;
 
   Place({
     required this.id,
@@ -61,8 +22,7 @@ class Place {
     required this.category,
     required this.rating,
     required this.reviewCount,
-    required this.openHours, // <--- mới thêm
-    required this.comments,
+    required this.openHours,
   });
 
   factory Place.fromJson(Map<String, dynamic> map) {
@@ -80,10 +40,7 @@ class Place {
       category: map['category'],
       rating: (map['rating'] as num).toDouble(),
       reviewCount: map['reviewCount'],
-      openHours: map['openHours'], // <--- mới thêm
-      comments: (map['comments'] as List)
-          .map((c) => Comment.fromMap(c))
-          .toList(),
+      openHours: map['openHours'], 
     );
   }
   
@@ -99,7 +56,6 @@ class Place {
       'rating': rating,
       'reviewCount': reviewCount,
       'openHours': openHours, // <--- mới thêm
-      'comments': comments.map((c) => c.toMap()).toList(),
     };
   }
 }

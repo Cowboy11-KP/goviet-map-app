@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
+// import 'package:goviet_map_app/seeding_script.dart';
 import 'firebase_options.dart';
 
 import 'package:goviet_map_app/viewmodels/location_viewmodel.dart';
@@ -14,6 +15,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  // await runSeeding();
   runApp(
     MultiProvider(
       providers: [
