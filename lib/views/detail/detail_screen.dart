@@ -24,7 +24,6 @@ class _DetailScreenState extends State<DetailScreen> {
 
   final CommentViewModel _viewModel = CommentViewModel();
 
-  @override
   void _showAddCommentSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,

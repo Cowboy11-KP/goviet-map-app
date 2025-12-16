@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:goviet_map_app/viewmodels/auth_service.dart';
-import 'package:goviet_map_app/views/Home/root_screen.dart.dart';
-
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -14,8 +13,8 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController(); // Dùng cho đăng ký
-  final TextEditingController _confirmPassController = TextEditingController(); // Dùng cho đăng ký
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _confirmPassController = TextEditingController();
 
   final AuthService _authService = AuthService();
   
@@ -36,7 +35,6 @@ class _SignInScreenState extends State<SignInScreen> {
   void _toggleForm(bool isLogin) {
     setState(() {
       _isLogin = isLogin;
-      // Clear form khi chuyển tab để tránh nhầm lẫn
       _emailController.clear();
       _passController.clear();
       _nameController.clear();
@@ -44,30 +42,32 @@ class _SignInScreenState extends State<SignInScreen> {
     });
   }
 
+  // --- HÀM LƯU TRẠNG THÁI LOGIN ---
+  Future<void> _saveLoginState(bool isRemembered) async {
+    final prefs = await SharedPreferences.getInstance();
+    // Lưu key 'isRemembered' để StartScreen kiểm tra
+    await prefs.setBool('isRemembered', isRemembered);
+  }
+
   // --- HÀM XỬ LÝ ĐĂNG NHẬP / ĐĂNG KÝ EMAIL ---
   void _handleEmailAuth() async {
-    // Validate cơ bản
     if (_emailController.text.isEmpty || _passController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Vui lòng nhập đầy đủ thông tin")));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Vui lòng nhập đầy đủ thông tin")));
       return;
     }
 
     if (!_isLogin) {
-      // Logic riêng cho Đăng ký
       if (_passController.text.length < 6) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Mật khẩu phải có ít nhất 6 ký tự.")),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Mật khẩu phải có ít nhất 6 ký tự.")));
         return;
       }
-
       if (_passController.text != _confirmPassController.text) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Mật khẩu nhập lại không khớp")));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Mật khẩu nhập lại không khớp")));
         return;
       }
     }
 
-    setState(() => _isLoading = true); // Bắt đầu load
+    setState(() => _isLoading = true);
 
     try {
       final user = _isLogin
@@ -75,18 +75,19 @@ class _SignInScreenState extends State<SignInScreen> {
           : await _authService.signUpWithEmail(_emailController.text.trim(), _passController.text.trim());
 
       if (user != null && mounted) {
-         // Thành công -> Chuyển màn hình
-         Navigator.pushReplacement(
-            context, 
-            MaterialPageRoute(builder: (context) => RootScreen())
-          );
+        // --- LƯU TRẠNG THÁI REMEMBER ---
+        // Nếu người dùng tick vào checkbox, lưu true. Không tick thì lưu false.
+        await _saveLoginState(_rememberPassword);
+
+        // Chuyển màn hình (Dùng named route cho đồng bộ với main.dart)
+        Navigator.pushReplacementNamed(context, '/home');
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
       }
     } finally {
-      if (mounted) setState(() => _isLoading = false); // Tắt load
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
@@ -96,13 +97,13 @@ class _SignInScreenState extends State<SignInScreen> {
     try {
       final user = await _authService.signInWithGoogle();
       if (user != null && mounted) {
-        Navigator.pushReplacement(
-            context, 
-            MaterialPageRoute(builder: (context) => RootScreen())
-        );
+        // --- LƯU TRẠNG THÁI REMEMBER ---
+        // Với Google, thường mặc định là luôn nhớ đăng nhập
+        await _saveLoginState(true);
+
+        Navigator.pushReplacementNamed(context, '/home');
       }
     } catch (e) {
-      // Lỗi hoặc user hủy login thì không làm gì hoặc hiện thông báo nhẹ
       print("Google Login Error: $e");
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -145,7 +146,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                 ),
                 const SizedBox(width: 4),
-                Text('/', style: TextStyle(fontSize: 28)),
+                const Text('/', style: TextStyle(fontSize: 28)),
                 const SizedBox(width: 4),
                 GestureDetector(
                   onTap: () => _toggleForm(false),
@@ -161,37 +162,42 @@ class _SignInScreenState extends State<SignInScreen> {
             const SizedBox(height: 24),
 
             _isLogin ? _buildLoginForm() : _buildRegisterForm(),
+            
             const SizedBox(height: 24),
+            
+            // Nút Action chính
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: _isLoading ? null : _handleEmailAuth, 
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.all(12),
-                  backgroundColor: Color(0xff659B4D),
+                  padding: const EdgeInsets.all(12),
+                  backgroundColor: const Color(0xff659B4D),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadiusGeometry.circular(24)
+                    borderRadius: BorderRadius.circular(24)
                   ),
-              
                 ),
-                child: Text(
-                  _isLogin ? 'Đăng nhập' : 'Đăng kí',
-                  style:Theme.of(context).textTheme.labelLarge!.copyWith(color: Colors.white)
-                )
+                child: _isLoading 
+                  ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                  : Text(
+                      _isLogin ? 'Đăng nhập' : 'Đăng kí',
+                      style:Theme.of(context).textTheme.labelLarge!.copyWith(color: Colors.white)
+                    )
               ),
             ),
             const SizedBox(height: 12),
+            
+            // Nút Google
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: (){}, 
+                onPressed: _isLoading ? null : _handleGoogleLogin, 
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadiusGeometry.circular(24),
-                    side: BorderSide(color: Color(0xffBABABA))
+                    borderRadius: BorderRadius.circular(24),
+                    side: const BorderSide(color: Color(0xffBABABA))
                   ),
-              
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -206,18 +212,19 @@ class _SignInScreenState extends State<SignInScreen> {
                 )
               ),
             ),
+            
             const SizedBox(height: 12),
+            // Nút Facebook (Giữ nguyên UI)
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: _isLoading ? null : _handleGoogleLogin, 
+                onPressed: (){}, 
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadiusGeometry.circular(24),
-                    side: BorderSide(color: Color(0xffBABABA))
+                    borderRadius: BorderRadius.circular(24),
+                    side: const BorderSide(color: Color(0xffBABABA))
                   ),
-              
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -251,14 +258,8 @@ class _SignInScreenState extends State<SignInScreen> {
             decoration: InputDecoration(
               hintText: 'Nhập gmail của bạn',
               contentPadding: const EdgeInsets.all(8),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(24),
-                borderSide: const BorderSide(width: 1),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(24),
-                borderSide: const BorderSide(color: Color(0xff659B4D), width: 2),
-              ),
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(24)),
+              focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(24), borderSide: const BorderSide(color: Color(0xff659B4D), width: 2)),
             ),
           ),
           const SizedBox(height: 12),
@@ -270,28 +271,17 @@ class _SignInScreenState extends State<SignInScreen> {
             decoration: InputDecoration(
               hintText: 'Nhập mật khẩu của bạn',
               contentPadding: const EdgeInsets.all(8),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(24),
-                borderSide: const BorderSide(width: 1),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(24),
-                borderSide: const BorderSide(color: Color(0xff659B4D), width: 2),
-              ),
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(24)),
+              focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(24), borderSide: const BorderSide(color: Color(0xff659B4D), width: 2)),
               suffixIcon: IconButton(
-                onPressed: () {
-                  setState(() {
-                    _hidePassword = !_hidePassword;
-                  });
-                },
-                icon: SvgPicture.asset(
-                  'assets/icons/eye.svg',
-                ),
+                onPressed: () => setState(() => _hidePassword = !_hidePassword),
+                icon: SvgPicture.asset('assets/icons/eye.svg'),
               ),
             ),
           ),
           const SizedBox(height: 12),
-          // Remember password + forgot password
+          
+          // --- CHECKBOX NHỚ MẬT KHẨU ---
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -306,20 +296,14 @@ class _SignInScreenState extends State<SignInScreen> {
                       });
                     },
                     activeColor: const Color(0xff659B4D),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4),
-                    ),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
                   ),
                   const Text('Nhớ mật khẩu'),
                 ],
               ),
               const Text(
                 'Quên mật khẩu',
-                style: TextStyle(
-                  color: Color(0xFF2C93CF),
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: TextStyle(color: Color(0xFF2C93CF), fontSize: 12, fontWeight: FontWeight.w600),
               ),
             ],
           ),
@@ -341,14 +325,8 @@ class _SignInScreenState extends State<SignInScreen> {
             decoration: InputDecoration(
               hintText: 'Nhập tên của bạn',
               contentPadding: const EdgeInsets.all(8),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(24),
-                borderSide: const BorderSide(width: 1),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(24),
-                borderSide: const BorderSide(color: Color(0xff659B4D), width: 2),
-              ),
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(24)),
+              focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(24), borderSide: const BorderSide(color: Color(0xff659B4D), width: 2)),
             ),
           ),
           const SizedBox(height: 12),
@@ -359,14 +337,8 @@ class _SignInScreenState extends State<SignInScreen> {
             decoration: InputDecoration(
               hintText: 'Nhập gmail của bạn',
               contentPadding: const EdgeInsets.all(8),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(24),
-                borderSide: const BorderSide(width: 1),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(24),
-                borderSide: const BorderSide(color: Color(0xff659B4D), width: 2),
-              ),
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(24)),
+              focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(24), borderSide: const BorderSide(color: Color(0xff659B4D), width: 2)),
             ),
           ),
           const SizedBox(height: 12),
@@ -378,24 +350,11 @@ class _SignInScreenState extends State<SignInScreen> {
             decoration: InputDecoration(
               hintText: 'Tạo mật khẩu',
               contentPadding: const EdgeInsets.all(8),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(24),
-                borderSide: const BorderSide(width: 1),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(24),
-                borderSide: const BorderSide(color: Color(0xff659B4D), width: 2),
-              ),
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(24)),
+              focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(24), borderSide: const BorderSide(color: Color(0xff659B4D), width: 2)),
               suffixIcon: IconButton(
-                onPressed: () {
-                  setState(() {
-                    _hidePassword = !_hidePassword;
-                  });
-                },
-                icon: SvgPicture.asset(
-                  'assets/icons/eye.svg',
-                  
-                ),
+                onPressed: () => setState(() => _hidePassword = !_hidePassword),
+                icon: SvgPicture.asset('assets/icons/eye.svg'),
               ),
             ),
           ),
@@ -408,24 +367,11 @@ class _SignInScreenState extends State<SignInScreen> {
             decoration: InputDecoration(
               hintText: 'Nhập',
               contentPadding: const EdgeInsets.all(8),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(24),
-                borderSide: const BorderSide(width: 1),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(24),
-                borderSide: const BorderSide(color: Color(0xff659B4D), width: 2),
-              ),
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(24)),
+              focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(24), borderSide: const BorderSide(color: Color(0xff659B4D), width: 2)),
               suffixIcon: IconButton(
-                onPressed: () {
-                  setState(() {
-                    _hidePassword = !_hidePassword;
-                  });
-                },
-                icon: SvgPicture.asset(
-                  'assets/icons/eye.svg',
-                  
-                ),
+                onPressed: () => setState(() => _hidePassword = !_hidePassword),
+                icon: SvgPicture.asset('assets/icons/eye.svg'),
               ),
             ),
           ),

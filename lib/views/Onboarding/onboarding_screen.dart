@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:goviet_map_app/views/Login/sign_in_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});
 
@@ -22,18 +23,25 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     },
   ];
 
-  void _skip() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => SignInScreen())
-    );
+  Future<void> _completeOnboarding() async {
+    final prefs = await SharedPreferences.getInstance();
+  
+    await prefs.setBool('seenOnboarding', true); 
+
+    if (mounted) {
+      Navigator.pushReplacementNamed(context, '/login');
+    }
   }
+
+  // void _skip() {
+  //   Navigator.pushReplacementNamed(context, '/login');
+  // }
   
   void _nextPage() {
     if (_currentPage < _pages.length - 1) {
       _controller.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
     } else {
-      _skip();
+      _completeOnboarding();
     }
   }
 
@@ -71,7 +79,14 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               )
             ),
             ElevatedButton(
-              onPressed: _nextPage, 
+              onPressed: _nextPage,
+              style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                  backgroundColor: Colors.white, // Nền trắng
+                  side: const BorderSide(color: Color(0xff659B4D)), // Viền xanh
+                  elevation: 0,
+                ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -79,6 +94,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     'Tiếp',
                     style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Color(0xff517C3E)),
                   ),
+                  const SizedBox(width: 8),
                   Icon(Icons.arrow_forward_ios_rounded, color: Color(0xff517C3E),)
                 ],
               )
