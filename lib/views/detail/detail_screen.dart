@@ -123,13 +123,13 @@ class _DetailScreenState extends State<DetailScreen> {
                 ),
                 _buildActionButton(
                   icon: Icons.call, 
-                  label: "Dẫn đường", 
+                  label: "Gọi", 
                   isPrimary: false,
                   
                 ),
                 _buildActionButton(
                   icon: Icons.public, 
-                  label: "Dẫn đường", 
+                  label: "Trang web", 
                   isPrimary: false,
                 ),
               ],

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 
 class LocationProvider extends ChangeNotifier {
 
+  // Tính toán khoảng cách
   static double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
     const earthRadius = 6371;
     double dLat = _degToRad(lat2 - lat1);
@@ -21,11 +23,12 @@ class LocationProvider extends ChangeNotifier {
 
     return earthRadius * c;
   }
-
   static double _degToRad(double deg) => deg * (pi / 180);
 
   Position? _currentPosition;
   String? _currentAddress;
+  StreamSubscription<Position>? _positionStreamSubscription; // Để quản lý luồng dữ liệu
+  
   String? _error;
   bool _isLoading = false;
 
@@ -36,6 +39,38 @@ class LocationProvider extends ChangeNotifier {
 
   bool get hasPosition => _currentPosition != null;
 
+  // --- HÀM BẮT ĐẦU THEO DÕI VỊ TRÍ (REAL-TIME) ---
+  void startTrackingLocation() async {
+    // 1. Kiểm tra quyền trước khi bắt đầu
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) return;
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) return;
+    }
+    if (permission == LocationPermission.deniedForever) return;
+
+    // 2. Cấu hình độ chính xác
+    const LocationSettings locationSettings = LocationSettings(
+      accuracy: LocationAccuracy.high, // Độ chính xác cao nhất (GPS)
+      distanceFilter: 10, // Chỉ cập nhật khi di chuyển > 10 mét (Tiết kiệm pin)
+    );
+
+    // 3. Lắng nghe luồng dữ liệu (Stream)
+    // Hủy stream cũ nếu có để tránh trùng lặp
+    await _positionStreamSubscription?.cancel();
+    
+    _positionStreamSubscription = Geolocator.getPositionStream(locationSettings: locationSettings)
+        .listen((Position? position) {
+      if (position != null) {
+        _currentPosition = position;
+        debugPrint("📍 Vị trí mới: ${position.latitude}, ${position.longitude}");
+        notifyListeners(); // Báo cho UI cập nhật
+      }
+    });
+  }
   //Hàm lấy tọa độ
   Future<void> fetchLocation() async {
     _isLoading = true;
@@ -89,6 +124,10 @@ class LocationProvider extends ChangeNotifier {
           _error = 'Không lấy được vị trí, kiểm tra GPS hoặc quyền';
           debugPrint(_error);
         }
+
+        // // Gọi hàm tracking luôn để đảm bảo logic đồng bộ
+        // startTrackingLocation();
+
       } catch (e) {
         _error = 'Lỗi khi lấy vị trí: $e';
         debugPrint(_error);
@@ -103,6 +142,13 @@ class LocationProvider extends ChangeNotifier {
     }
   }
 
+  // Hủy lắng nghe khi thoát app để tránh rò rỉ bộ nhớ
+  @override
+  void dispose() {
+    _positionStreamSubscription?.cancel();
+    super.dispose();
+  }
+  
   //Hàm đổi tọa độ thành vị trí 
   Future<String> getAddressFromLatLng(double lat, double lng) async {
   try {

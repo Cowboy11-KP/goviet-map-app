@@ -49,6 +49,7 @@ dependencies:
   cloud_firestore: ^6.1.0
   shared_preferences: ^2.5.4
   http: ^1.6.0
+  flutter_map_location_marker: ^10.1.0
 
 dev_dependencies:
   flutter_test:

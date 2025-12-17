@@ -1,5 +1,6 @@
   import 'dart:convert'; // Để decode JSON
-  import 'package:http/http.dart' as http; // Để gọi API
+  import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
+import 'package:http/http.dart' as http; // Để gọi API
   import 'package:flutter/material.dart';
   import 'package:flutter_map/flutter_map.dart';
   import 'package:goviet_map_app/viewmodels/location_viewmodel.dart';
@@ -26,7 +27,7 @@
     double _distanceKm = 0.0;
     double _durationMinutes = 0.0;
     bool _isRouteVisible = false;
-  
+    
     // Hàm gọi API lấy đường đi (Sử dụng OSRM miễn phí)
     Future<void> _getRoute(LatLng start, LatLng end) async {
       // API OSRM format: longitude,latitude (Lưu ý thứ tự: Kinh độ trước, Vĩ độ sau)
@@ -90,6 +91,7 @@
       super.initState();
       WidgetsBinding.instance.addPostFrameCallback((_) {
         context.read<LocationProvider>().fetchLocation();
+        context.read<LocationProvider>().startTrackingLocation();
       });
     }
 
@@ -152,7 +154,20 @@
                     ),
                   ],
                 ),
-            
+
+                // di chuyển 
+                CurrentLocationLayer(
+                  alignPositionOnUpdate: AlignOnUpdate.never, 
+                  alignDirectionOnUpdate: AlignOnUpdate.never,
+                  style: LocationMarkerStyle(
+                    marker: const DefaultLocationMarker(
+                      child: Icon(Icons.navigation, color: Colors.white, size: 20),
+                    ),
+                    markerSize: const Size(40, 40),
+                    markerDirection: MarkerDirection.heading, 
+                  ),
+                ),
+
                 MarkerLayer(
                   markers: [
                     // 1. Thêm Marker hiển thị vị trí của TÔI (nếu có)
@@ -203,6 +218,9 @@
                                       ScaffoldMessenger.of(context).showSnackBar(
                                         const SnackBar(content: Text("Đang xác định vị trí của bạn..."))
                                       );
+
+                                      // Thử kích hoạt lại tracking nếu bị mất
+                                      context.read<LocationProvider>().startTrackingLocation();
                                     }
                                   },
                                   ),
@@ -251,12 +269,12 @@
                   ],
                 ),
 
-                // 2. BẢNG THÔNG TIN LỘ TRÌNH (Chỉ hiện khi có đường đi)
+                // BẢNG THÔNG TIN LỘ TRÌNH (Chỉ hiện khi có đường đi)
                 if (_isRouteVisible)
                   Positioned(
-                    top: 50, // Cách mép trên (tránh tai thỏ)
-                    left: 16,
-                    right: 16,
+                    top: 10,
+                    left: 10,
+                    right: 10,
                     child: Card(
                       elevation: 4,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
