@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:goviet_map_app/viewmodels/location_viewmodel.dart';
 import 'package:goviet_map_app/views/Home/explore_screen.dart';
-import 'package:goviet_map_app/views/Home/favorite_screen.dart';
+import 'package:goviet_map_app/views/Home/favorite/favorite_screen.dart';
 import 'package:goviet_map_app/views/Home/home_screen.dart';
 import 'package:goviet_map_app/views/Home/profile_screen.dart';
 import 'package:provider/provider.dart';
