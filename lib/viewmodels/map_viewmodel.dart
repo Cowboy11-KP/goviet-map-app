@@ -168,6 +168,57 @@ class MapViewModel extends ChangeNotifier {
     super.dispose();
   }
 
+  // --- 3. SEARCH LOGIC (NOMINATIM) ---
+  bool _isSearching = false;
+  List<dynamic> _searchResults = []; // Lưu danh sách kết quả tìm kiếm
+
+  bool get isSearching => _isSearching;
+  List<dynamic> get searchResults => _searchResults;
+
+  // Hàm tìm kiếm địa điểm
+  Future<void> searchPlaces(String query) async {
+    if (query.trim().isEmpty) return;
+
+    _isSearching = true;
+    notifyListeners();
+
+    // URL API Nominatim
+    final url = Uri.parse(
+        'https://nominatim.openstreetmap.org/search?q=$query&format=json&limit=5&addressdetails=1&countrycodes=vn');
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          // QUAN TRỌNG: Phải có User-Agent định danh app của bạn
+          'User-Agent': 'com.example.goviet_map_app', 
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body) as List;
+        _searchResults = data;
+        
+        debugPrint("Tìm thấy ${_searchResults.length} kết quả");
+      } else {
+        _searchResults = [];
+        debugPrint("Lỗi tìm kiếm: ${response.statusCode}");
+      }
+    } catch (e) {
+      debugPrint("Lỗi gọi API tìm kiếm: $e");
+      _searchResults = [];
+    } finally {
+      _isSearching = false;
+      notifyListeners();
+    }
+  }
+  
+  // Hàm xóa kết quả tìm kiếm
+  void clearSearchResults() {
+    _searchResults = [];
+    notifyListeners();
+  }
+  
   // Tiện ích tính khoảng cách (Static)
   static double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
     const earthRadius = 6371;

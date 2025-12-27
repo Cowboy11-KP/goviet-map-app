@@ -247,20 +247,70 @@ class _ExploreScreenState extends State<ExploreScreen> {
                       BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 8, offset: const Offset(0, 3))
                     ],
                   ),
-                  child: TextField(
-                    controller: _searchController,
-                    decoration: InputDecoration(
-                      hintText: "Tìm địa điểm, loại hình...",
-                      hintStyle: TextStyle(color: Colors.grey[500], fontSize: 14),
-                      prefixIcon: const Icon(Icons.add_location_alt_outlined, color: Colors.red, size: 22),
-                      suffixIcon: const Icon(Icons.search, color: Colors.grey, size: 22),
-                      border: InputBorder.none,
-                      contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                      isDense: true, 
-                    ),
-                    onSubmitted: (value) {
-                      // Xử lý tìm kiếm
-                    },
+                  child: Column(
+                    children: [
+                      TextField(
+                        controller: _searchController,
+                        decoration: InputDecoration(
+                          hintText: "Tìm địa điểm, loại hình...",
+                          hintStyle: TextStyle(color: Colors.grey[500], fontSize: 14),
+                          prefixIcon: const Icon(Icons.add_location_alt_outlined, color: Colors.red, size: 22),
+                          suffixIcon: mapVM.isSearching
+                            ? const Padding(padding: EdgeInsets.all(12), child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2)))
+                            : IconButton(
+                                icon: const Icon(Icons.close, color: Colors.grey, size: 20),
+                                onPressed: () {
+                                  _searchController.clear();
+                                  mapVM.clearSearchResults(); // Xóa kết quả khi bấm X
+                                },
+                              ),
+                          border: InputBorder.none,
+                          contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                          isDense: true, 
+                        ),
+                        onSubmitted: (value) {
+                          mapVM.searchPlaces(value);
+                        },
+                      ),
+
+                      // --- DANH SÁCH KẾT QUẢ TÌM KIẾM (HIỆN DƯỚI Ô INPUT) ---
+                      if (mapVM.searchResults.isNotEmpty)
+                        Container(
+                          constraints: const BoxConstraints(maxHeight: 200), // Giới hạn chiều cao
+                          child: ListView.separated(
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            itemCount: mapVM.searchResults.length,
+                            separatorBuilder: (_, __) => const Divider(height: 1),
+                            itemBuilder: (context, index) {
+                              final result = mapVM.searchResults[index];
+                              return ListTile(
+                                dense: true,
+                                leading: const Icon(Icons.location_on, color: Colors.redAccent, size: 20),
+                                title: Text(result['display_name'] ?? "", maxLines: 2, overflow: TextOverflow.ellipsis),
+                                onTap: () {
+                                  // 1. Lấy tọa độ từ kết quả
+                                  final lat = double.parse(result['lat']);
+                                  final lon = double.parse(result['lon']);
+                                  final dest = LatLng(lat, lon);
+
+                                  // 2. Di chuyển map đến đó
+                                  _mapController.move(dest, 16.0);
+                                  
+                                  // 3. Xóa danh sách gợi ý và ẩn bàn phím
+                                  mapVM.clearSearchResults();
+                                  FocusScope.of(context).unfocus();
+
+                                  // 4. (Tùy chọn) Tự động vẽ đường đến đó nếu đang có vị trí
+                                  if (mapVM.hasPosition) {
+                                     _handleDirectionTap(dest);
+                                  }
+                                },
+                              );
+                            },
+                          ),
+                        )
+                    ],
                   ),
                 ),
               ],
