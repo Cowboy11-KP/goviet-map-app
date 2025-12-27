@@ -8,7 +8,7 @@ import 'package:goviet_map_app/views/Onboarding/onboarding_screen.dart';
 // import 'package:goviet_map_app/seeding_script.dart';
 import 'firebase_options.dart';
 
-import 'package:goviet_map_app/viewmodels/location_viewmodel.dart';
+import 'package:goviet_map_app/viewmodels/map_viewmodel.dart';
 import 'package:goviet_map_app/viewmodels/place_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:goviet_map_app/app_theme.dart';
@@ -23,7 +23,7 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => LocationProvider()),
+        ChangeNotifierProvider(create: (_) => MapViewModel()),
         ChangeNotifierProvider(create: (_) => PlaceViewModel()..loadPlaces()),
         Provider(create: (_) => FavoriteViewModel()),
       ],

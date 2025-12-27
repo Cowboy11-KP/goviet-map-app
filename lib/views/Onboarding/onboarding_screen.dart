@@ -78,26 +78,29 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 },
               )
             ),
-            ElevatedButton(
-              onPressed: _nextPage,
-              style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                  backgroundColor: Colors.white, // Nền trắng
-                  side: const BorderSide(color: Color(0xff659B4D)), // Viền xanh
-                  elevation: 0,
-                ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Tiếp',
-                    style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Color(0xff517C3E)),
+            Container(
+              margin:EdgeInsets.only(bottom: 24),
+              child: ElevatedButton(
+                onPressed: _nextPage,
+                style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                    backgroundColor: Colors.white, // Nền trắng
+                    side: const BorderSide(color: Color(0xff659B4D)), // Viền xanh
+                    elevation: 0,
                   ),
-                  const SizedBox(width: 8),
-                  Icon(Icons.arrow_forward_ios_rounded, color: Color(0xff517C3E),)
-                ],
-              )
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Tiếp',
+                      style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Color(0xff517C3E)),
+                    ),
+                    const SizedBox(width: 8),
+                    Icon(Icons.arrow_forward_ios_rounded, color: Color(0xff517C3E),)
+                  ],
+                )
+              ),
             )
           ],
         ),
