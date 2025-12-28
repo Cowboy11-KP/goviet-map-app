@@ -34,15 +34,11 @@ class ProvinceDetailScreen extends StatelessWidget {
         itemCount: favorites.length,
         itemBuilder: (context, index) {
           final favItem = favorites[index];
-
-          // --- QUAN TRỌNG: Chuyển FavoriteModel -> Place ---
-          // Vì PlaceCard cần object Place, ta tạo một Place tạm thời từ dữ liệu Favorite
-          // Những trường nào FavoriteModel không có (rating, hour...) ta để mặc định hoặc rỗng
           final placeConvert = Place(
             id: favItem.placeId,
             name: favItem.placeName,
             province: favItem.province,
-            description: "Đã lưu vào danh sách yêu thích", // Placeholder
+            description: "Đã lưu vào danh sách yêu thích", 
             images: [favItem.placeImage],
             rating: 0.0, // FavoriteModel hiện tại chưa lưu rating, nên để 0
             openHours: "", // Chưa lưu giờ mở cửa

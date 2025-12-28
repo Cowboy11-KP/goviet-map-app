@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:goviet_map_app/models/place_model.dart';
 import 'package:goviet_map_app/viewmodels/map_viewmodel.dart';
-import 'package:goviet_map_app/views/Home/explore_screen.dart';
-import 'package:goviet_map_app/views/Home/favorite/favorite_screen.dart';
-import 'package:goviet_map_app/views/Home/home_screen.dart';
-import 'package:goviet_map_app/views/Home/profile_screen.dart';
+import 'package:goviet_map_app/views/Page/map/explore_screen.dart';
+import 'package:goviet_map_app/views/Page/favorite/favorite_screen.dart';
+import 'package:goviet_map_app/views/Page/home/home_screen.dart';
+import 'package:goviet_map_app/views/Page/profile/profile_screen.dart';
+import 'package:goviet_map_app/views/Page/search/place_search_delegate.dart';
+import 'package:goviet_map_app/views/detail/detail_screen.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
 class RootScreen extends StatefulWidget {
@@ -39,6 +43,50 @@ class _HomeScreenState extends State<RootScreen> {
       context.read<MapViewModel>().fetchLocation();
     });
   }
+
+  // Hàm xử lý khi chọn kết quả từ Search
+  void _handleSearchResult(Place place) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DetailScreen(
+          place: place,
+          // Callback này sẽ chạy khi người dùng ấn nút "Dẫn đường" trong DetailScreen
+          onDirectionsPressed: () {
+            Navigator.pop(context);
+            setState(() {
+              currentIndex = 1;
+            });
+
+            // 3. Thực hiện vẽ đường đi
+            final mapVM = context.read<MapViewModel>();
+            
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (mapVM.hasPosition) {
+                mapVM.fetchRoute(
+                  LatLng(mapVM.currentPosition!.latitude, mapVM.currentPosition!.longitude),
+                  LatLng(place.location.latitude, place.location.longitude)
+                );
+                
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("Đang tìm đường đến ${place.name}..."), 
+                    backgroundColor: Colors.green
+                  )
+                );
+              } else {
+                mapVM.fetchLocation();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Vui lòng bật định vị"))
+                );
+              }
+            });
+          },
+        ),
+      ),
+    );
+  }
+  
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -142,22 +190,39 @@ class _HomeScreenState extends State<RootScreen> {
                       ),
                     ),
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(24),
-                      border: Border.all(color: Color(0xff8B8B8B)),
-                    ),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: "Tìm kiếm...",
-                        prefixIcon: const Icon(Icons.search),
-                        border: InputBorder.none,
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                  GestureDetector(
+                    onTap: () async {
+                      // 1. Mở màn hình Search
+                      final Place? result = await showSearch<Place?>(
+                        context: context,
+                        delegate: PlaceSearchDelegate(),
+                      );
+
+                      // 2. Nếu chọn địa điểm -> Xử lý
+                      if (result != null) {
+                        _handleSearchResult(result);
+                      }
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(color: const Color(0xff8B8B8B)),
+                      ),
+                      child: Row(
+                        children: const [
+                          Icon(Icons.search, color: Colors.grey),
+                          SizedBox(width: 12),
+                          Text(
+                            "Tìm kiếm địa điểm...",
+                            style: TextStyle(color: Colors.grey, fontSize: 16),
+                          ),
+                        ],
                       ),
                     ),
-                  )
+                  ),
+                  const SizedBox(height: 8),
                 ],
               ),
             ),

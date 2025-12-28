@@ -8,12 +8,14 @@ class PlaceCard extends StatelessWidget {
   final Place place;
   final String distance;
   final VoidCallback onTap; // Hàm callback khi bấm vào thẻ để chuyển trang
+  final double? width;
 
   const PlaceCard({
     super.key,
     required this.place,
     required this.distance,
     required this.onTap,
+    this.width
   });
 
   @override
@@ -25,7 +27,7 @@ class PlaceCard extends StatelessWidget {
       onTap: onTap, // Gọi hàm chuyển trang khi bấm vào thẻ
       child: Container(
         height: 280,
-        width: 210,
+        width: width ?? 210,
         padding: const EdgeInsets.all(4),
         margin: const EdgeInsets.only(right: 8),
         decoration: BoxDecoration(
@@ -48,7 +50,6 @@ class PlaceCard extends StatelessWidget {
                 // Ảnh nền
                 Container(
                   height: 150,
-                  width: 200,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     image: DecorationImage(

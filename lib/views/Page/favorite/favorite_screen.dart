@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:goviet_map_app/models/favorite_model.dart';
 import 'package:goviet_map_app/viewmodels/favorite_viewmodel.dart';
-import 'package:goviet_map_app/views/Home/favorite/province_detail_screen.dart';
+import 'package:goviet_map_app/views/Page/favorite/province_detail_screen.dart';
 class FavoriteScreen extends StatelessWidget {
   const FavoriteScreen({super.key});
 

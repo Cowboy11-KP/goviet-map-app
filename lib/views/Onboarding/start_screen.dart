@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // Import các màn hình điều hướng
 import 'package:goviet_map_app/views/Onboarding/onboarding_screen.dart';
-import 'package:goviet_map_app/views/Home/root_screen.dart.dart';
+import 'package:goviet_map_app/views/Page/root_screen.dart.dart';
 
 class StartScreen extends StatefulWidget {
   const StartScreen({super.key});

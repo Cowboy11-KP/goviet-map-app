@@ -75,7 +75,7 @@ class AppTheme {
   );
 
   static ThemeData lightTheme = ThemeData(
-    scaffoldBackgroundColor: Color(0xffE5E5E5),
+    scaffoldBackgroundColor: Color(0xffF6F6F6),
     textTheme: const TextTheme(
       headlineLarge: h1,      
       headlineMedium: h2, 
