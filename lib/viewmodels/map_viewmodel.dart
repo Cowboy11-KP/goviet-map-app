@@ -1,7 +1,6 @@
 // lib/viewmodels/map_viewmodel.dart
 import 'dart:async';
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -24,6 +23,9 @@ class MapViewModel extends ChangeNotifier {
   bool _isRouteVisible = false;
   bool _isLoadingRoute = false;
 
+  // --- NAVIGATING STATE ---
+  bool _isNavigating = false;
+
   // --- GETTERS ---
   Position? get currentPosition => _currentPosition;
   String? get currentAddress => _currentAddress;
@@ -36,6 +38,20 @@ class MapViewModel extends ChangeNotifier {
   double get durationMinutes => _durationMinutes;
   bool get isRouteVisible => _isRouteVisible;
   bool get isLoadingRoute => _isLoadingRoute;
+
+  bool get isNavigating => _isNavigating;
+
+  // Hàm bắt đầu dẫn đường
+  void startNavigation() {
+    _isNavigating = true;
+    notifyListeners();
+  }
+
+  // Hàm dừng dẫn đường (quay về xem trước)
+  void stopNavigation() {
+    _isNavigating = false;
+    notifyListeners();
+  }
 
   // --- 1. LOCATION LOGIC ---
 
@@ -159,6 +175,7 @@ class MapViewModel extends ChangeNotifier {
     _distanceKm = 0.0;
     _durationMinutes = 0.0;
     _isRouteVisible = false;
+    _isNavigating = false;
     notifyListeners();
   }
 
@@ -221,17 +238,13 @@ class MapViewModel extends ChangeNotifier {
   
   // Tiện ích tính khoảng cách (Static)
   static double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
-    const earthRadius = 6371;
-    double dLat = _degToRad(lat2 - lat1);
-    double dLon = _degToRad(lon2 - lon1);
-
-    double a = sin(dLat / 2) * sin(dLat / 2) +
-        cos(_degToRad(lat1)) * cos(_degToRad(lat2)) *
-        sin(dLon / 2) * sin(dLon / 2);
-
-    double c = 2 * atan2(sqrt(a), sqrt(1 - a));
-    return earthRadius * c;
+    try {
+      const Distance distance = Distance();
+      // Tính khoảng cách theo Km
+      return distance.as(LengthUnit.Kilometer, LatLng(lat1, lon1), LatLng(lat2, lon2));
+    } catch (e) {
+      debugPrint("Lỗi tính khoảng cách: $e");
+      return 0.0;
+    }
   }
-
-  static double _degToRad(double deg) => deg * (pi / 180);
 }

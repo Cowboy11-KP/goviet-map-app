@@ -114,10 +114,14 @@ class _DetailScreenState extends State<DetailScreen> {
                   label: "Dẫn đường", 
                   isPrimary: true,
                   onTap: () {
-                    
+                    // Logic mới: Chỉ gọi callback, KHÔNG tự pop ở đây
                     if (widget.onDirectionsPressed != null) {
                       widget.onDirectionsPressed!();
-                      Navigator.pop(context); 
+                    } else {
+                      // Trường hợp mở từ Home mà quên truyền callback, ta có thể thông báo
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Vui lòng mở bản đồ để sử dụng tính năng này"))
+                      );
                     }
                   }
                 ),

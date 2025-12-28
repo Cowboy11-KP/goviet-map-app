@@ -19,6 +19,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
   final TextEditingController _searchController = TextEditingController();
   bool _hasMovedToUser = false;
 
+  LatLng? _currentDestination;
+
   // Danh sách bộ lọc
   final List<Map<String, dynamic>> _filters = [
     {"label": "Phổ biến", "icon": Icons.trending_up},
@@ -40,9 +42,15 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   // Hàm xử lý khi bấm "Chỉ đường" từ DetailScreen
   void _handleDirectionTap(LatLng destination) {
+    //Lưu lại đích đến
     final mapVM = context.read<MapViewModel>();
+
+    _currentDestination = destination;
     
     if (Navigator.canPop(context)) Navigator.pop(context);
+
+    // Reset trạng thái dẫn đường về false khi tìm đường mới
+    mapVM.stopNavigation();
 
     if (mapVM.hasPosition) {
       final myLocation = LatLng(
@@ -347,8 +355,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
     );
   }
 
-  // ... (Giữ nguyên các widget con khác: _buildRouteInfoSheet, _buildFab, _buildMarkerIcon...)
-  
   Widget _buildRouteInfoSheet(MapViewModel mapVM) {
     return Positioned(
       bottom: 0, left: 0, right: 0,
@@ -381,25 +387,58 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     ],
                   ),
                 ),
+                // NÚT HỦY
                 OutlinedButton(
-                  onPressed: mapVM.clearRoute,
+                  onPressed: () {
+                    if (mapVM.isNavigating && _currentDestination != null) {
+                      
+                      mapVM.stopNavigation(); // Gọi VM để update trạng thái
+                      
+                      // Logic UI: Zoom out về toàn cảnh
+                      _handleDirectionTap(_currentDestination!); 
+                      
+                    } else {
+                      mapVM.clearRoute();
+                      _mapController.rotate(0);
+                      _currentDestination = null;
+                    }
+                  },
                   style: OutlinedButton.styleFrom(
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                     foregroundColor: Colors.black
                   ),
-                  child: const Text("Hủy"),
+                  child: Text(mapVM.isNavigating ? "Dừng" : "Hủy"),
                 ),
                 const SizedBox(width: 10),
-                ElevatedButton.icon(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue, foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12)
+                
+                // NÚT BẮT ĐẦU
+                if (!mapVM.isNavigating)
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      if (mapVM.hasPosition) {
+                        mapVM.startNavigation();
+                        // 1. Lấy vị trí và hướng (heading)
+                        final currentPos = mapVM.currentPosition!;
+                        final latLng = LatLng(currentPos.latitude, currentPos.longitude);
+                        final heading = currentPos.heading; // Hướng GPS (0-360)
+
+                        // 2. Di chuyển map + Xoay map + Zoom gần (18.0)
+                        _mapController.moveAndRotate(latLng, 18.0, heading);
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Đang lấy vị trí của bạn..."))
+                        );
+                        mapVM.fetchLocation();
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue, foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12)
+                    ),
+                    icon: const Icon(Icons.navigation),
+                    label: const Text("Bắt đầu"),
                   ),
-                  icon: const Icon(Icons.navigation),
-                  label: const Text("Bắt đầu"),
-                ),
               ],
             ),
           ],
@@ -435,19 +474,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
   Widget _buildMarkerIcon(String name) {
     return Column(
       children: [
-        const Icon(Icons.location_on, color: Colors.red, size: 36),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(4),
-            boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 2)],
-          ),
-          child: Text(
-            name, 
-            style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 10), 
-            overflow: TextOverflow.ellipsis, maxLines: 1
-          ),
+        Text(
+          name, 
+          style: const TextStyle(color: Colors.black54, fontWeight: FontWeight.bold, fontSize: 10), 
+          overflow: TextOverflow.ellipsis, maxLines: 1
         )
       ],
     );
