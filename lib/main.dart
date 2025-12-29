@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:goviet_map_app/viewmodels/auth_viewmodel.dart';
 import 'package:goviet_map_app/viewmodels/favorite_viewmodel.dart';
 import 'package:goviet_map_app/views/Page/root_screen.dart.dart';
 import 'package:goviet_map_app/views/Login/sign_in_screen.dart';
@@ -23,6 +24,7 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => AuthViewModel()),
         ChangeNotifierProvider(create: (_) => MapViewModel()),
         ChangeNotifierProvider(create: (_) => PlaceViewModel()..loadPlaces()),
         Provider(create: (_) => FavoriteViewModel()),

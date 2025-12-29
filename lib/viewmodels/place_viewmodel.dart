@@ -1,20 +1,21 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:goviet_map_app/models/place_model.dart';
+import 'package:goviet_map_app/services/place_service.dart';
 
 class PlaceViewModel extends ChangeNotifier {
+  final PlaceService _placeService = PlaceService();
 
   List<Place> _masterPlaces = []; 
+  List<Place> _places = [];       
   
-  List<Place> _places = [];
-  
-  bool _isLoading = false;
+  bool _isLoading = false;          // Loading cho danh sách tổng
+  bool _isFetchingDetail = false;   // Loading riêng cho việc lấy chi tiết
 
-  // UI chỉ cần lấy _places để hiển thị
+  // Getters
   List<Place> get places => _places;
   List<Place> get masterPlaces => _masterPlaces;
   bool get isLoading => _isLoading;
+  bool get isFetchingDetail => _isFetchingDetail; // Getter mới
 
   Map<String, List<Place>> get placesByProvince {
     Map<String, List<Place>> grouped = {};
@@ -27,67 +28,87 @@ class PlaceViewModel extends ChangeNotifier {
     return grouped;
   }
 
-  // --- HÀM TẢI DỮ LIỆU (SỬA LẠI) ---
+  // --- 1. HÀM TẢI DỮ LIỆU TỪ FIREBASE ---
   Future<void> loadPlaces() async {
-    // Nếu danh sách gốc đã có dữ liệu thì không cần tải lại file JSON
     if (_masterPlaces.isNotEmpty) return; 
 
     _isLoading = true;
     notifyListeners(); 
 
     try {
-      final jsonStr = await rootBundle.loadString('assets/data/vietnam_tourist_places.json');
-      final List data = jsonDecode(jsonStr);
-      
-      // Bước 1: Parse dữ liệu vào danh sách GỐC (_masterPlaces)
-      _masterPlaces = data.map((e) => Place.fromJson(e)).toList();
-      
-      // Bước 2: Ban đầu, danh sách HIỂN THỊ (_places) sẽ giống hệt danh sách GỐC
-      _places = List.from(_masterPlaces);
-      
+      final data = await _placeService.getAllPlaces();
+      _masterPlaces = data;
+      _places = List.from(_masterPlaces); 
     } catch (e) {
       debugPrint("Lỗi tải places: $e");
+    } finally {
+      _isLoading = false;
+      notifyListeners(); 
     }
-
-    _isLoading = false;
-    notifyListeners(); 
   }
 
-  // --- HÀM TÌM KIẾM NÂNG CAO ---
+  // --- 2. HÀM LẤY CHI TIẾT THEO ID (MỚI THÊM) ---
+  Future<Place?> getPlaceById(String id) async {
+    // 1. Tìm trong list có sẵn trước (để đỡ tốn gọi mạng)
+    try {
+      final localPlace = _masterPlaces.firstWhere((p) => p.id == id);
+      debugPrint("✅ Tìm thấy Place trong bộ nhớ local: ${localPlace.name}");
+      return localPlace;
+    } catch (e) {
+      // Nếu không thấy trong list local -> Gọi Firebase
+    }
+
+    // 2. Gọi Firebase nếu không thấy local
+    _isFetchingDetail = true;
+    notifyListeners();
+
+    try {
+      final place = await _placeService.getPlaceById(id);
+      return place;
+    } catch (e) {
+      debugPrint("Lỗi lấy chi tiết place: $e");
+      return null;
+    } finally {
+      _isFetchingDetail = false;
+      notifyListeners();
+    }
+  }
+
+  // --- 3. HÀM TÌM KIẾM UI ---
   void searchPlaces(String query) {
     if (query.trim().isEmpty) {
       _places = List.from(_masterPlaces);
     } else {
-      // 1. Chuẩn hóa từ khóa tìm kiếm (xóa dấu, xóa cách, lower case)
       final cleanQuery = _normalizeString(query);
-
       _places = _masterPlaces.where((place) {
-        // 2. Chuẩn hóa tên địa điểm trong dữ liệu
         final cleanName = _normalizeString(place.name);
-        
-        // 3. So sánh chuỗi đã làm sạch
-        // Ví dụ: "Hà Nội" -> "hanoi" vs "Ha Noi" -> "hanoi" => Match
-        return cleanName.contains(cleanQuery);
+        return cleanName.contains(cleanQuery); 
       }).toList();
     }
-
+    notifyListeners(); 
   }
 
-  // --- HÀM TIỆN ÍCH: CHUẨN HÓA CHUỖI TIẾNG VIỆT ---
+  // --- 4. HÀM TÌM KIẾM LOCAL (CHO SEARCH DELEGATE) ---
+  List<Place> searchLocal(String query) {
+    if (query.trim().isEmpty) {
+      return []; 
+    }
+    final cleanQuery = _normalizeString(query);
+    return _masterPlaces.where((place) {
+      final cleanName = _normalizeString(place.name);
+      return cleanName.contains(cleanQuery);
+    }).toList();
+  }
+
+  // --- UTILS ---
   String _normalizeString(String str) {
-    // 1. Chuyển về chữ thường
     String data = str.toLowerCase();
-    
-    // 2. Bảng mã thay thế dấu tiếng Việt
     const String withDiacritics = 'áàảãạăắằẳẵặâấầẩẫậéèẻẽẹêếềểễệóòỏõọôốồổỗộơớờởỡợúùủũụưứừửữựíìỉĩịýỳỷỹỵđ';
     const String withoutDiacritics = 'aaaaaaaaaaaaaaaaaeeeeeeeeeeeooooooooooooooooouuuuuuuuuuuiiiiiyyyyyd';
 
-    // 3. Lặp và thay thế
     for (int i = 0; i < withDiacritics.length; i++) {
       data = data.replaceAll(withDiacritics[i], withoutDiacritics[i]);
     }
-
-    // 4. Xóa khoảng trắng (để tìm "hanoi" vẫn ra "Hà Nội")
     return data.replaceAll(" ", "");
   }
 }

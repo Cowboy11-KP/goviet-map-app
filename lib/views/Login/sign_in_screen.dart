@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart'; // 1. Import Provider
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:goviet_map_app/viewmodels/auth_service.dart';
+import 'package:goviet_map_app/viewmodels/auth_viewmodel.dart'; // 2. Import ViewModel
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -16,12 +17,11 @@ class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _confirmPassController = TextEditingController();
 
-  final AuthService _authService = AuthService();
+  // Không cần khai báo AuthService và _isLoading ở đây nữa
   
   bool _hidePassword = true;
   bool _rememberPassword = false;
   bool _isLogin = true;
-  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -39,18 +39,19 @@ class _SignInScreenState extends State<SignInScreen> {
       _passController.clear();
       _nameController.clear();
       _confirmPassController.clear();
+      // Reset lỗi trong VM nếu có (tùy chọn)
     });
   }
 
   // --- HÀM LƯU TRẠNG THÁI LOGIN ---
   Future<void> _saveLoginState(bool isRemembered) async {
     final prefs = await SharedPreferences.getInstance();
-    // Lưu key 'isRemembered' để StartScreen kiểm tra
     await prefs.setBool('isRemembered', isRemembered);
   }
 
-  // --- HÀM XỬ LÝ ĐĂNG NHẬP / ĐĂNG KÝ EMAIL ---
+  // --- HÀM XỬ LÝ ĐĂNG NHẬP / ĐĂNG KÝ EMAIL (GỌI VM) ---
   void _handleEmailAuth() async {
+    // 1. Validate cơ bản
     if (_emailController.text.isEmpty || _passController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Vui lòng nhập đầy đủ thông tin")));
       return;
@@ -65,53 +66,60 @@ class _SignInScreenState extends State<SignInScreen> {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Mật khẩu nhập lại không khớp")));
         return;
       }
+      if (_nameController.text.isEmpty) {
+         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Vui lòng nhập họ tên")));
+         return;
+      }
     }
 
-    setState(() => _isLoading = true);
+    // 2. Gọi ViewModel
+    final authVM = context.read<AuthViewModel>(); // Dùng read để gọi hàm
+    bool success;
 
-    try {
-      final user = _isLogin
-          ? await _authService.signInWithEmail(_emailController.text.trim(), _passController.text.trim())
-          : await _authService.signUpWithEmail(_emailController.text.trim(), _passController.text.trim());
+    if (_isLogin) {
+      success = await authVM.login(_emailController.text.trim(), _passController.text.trim());
+    } else {
+      success = await authVM.register(_emailController.text.trim(), _passController.text.trim());
+      // Lưu ý: Nếu muốn update Display Name ngay khi đăng ký, bạn cần thêm logic updateProfile trong VM
+    }
 
-      if (user != null && mounted) {
-        // --- LƯU TRẠNG THÁI REMEMBER ---
-        // Nếu người dùng tick vào checkbox, lưu true. Không tick thì lưu false.
+    // 3. Xử lý kết quả
+    if (mounted) {
+      if (success) {
         await _saveLoginState(_rememberPassword);
-
-        // Chuyển màn hình (Dùng named route cho đồng bộ với main.dart)
         Navigator.pushReplacementNamed(context, '/home');
+      } else {
+        // Hiện lỗi từ ViewModel
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(authVM.errorMessage ?? "Đã có lỗi xảy ra"))
+        );
       }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
-      }
-    } finally {
-      if (mounted) setState(() => _isLoading = false);
     }
   }
 
-  // --- HÀM XỬ LÝ GOOGLE ---
+  // --- HÀM XỬ LÝ GOOGLE (GỌI VM) ---
   void _handleGoogleLogin() async {
-    setState(() => _isLoading = true);
-    try {
-      final user = await _authService.signInWithGoogle();
-      if (user != null && mounted) {
-        // --- LƯU TRẠNG THÁI REMEMBER ---
-        // Với Google, thường mặc định là luôn nhớ đăng nhập
-        await _saveLoginState(true);
+    final authVM = context.read<AuthViewModel>();
+    
+    final success = await authVM.loginGoogle();
 
+    if (mounted) {
+      if (success) {
+        await _saveLoginState(true);
         Navigator.pushReplacementNamed(context, '/home');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(authVM.errorMessage ?? "Đăng nhập Google thất bại"))
+        );
       }
-    } catch (e) {
-      print("Google Login Error: $e");
-    } finally {
-      if (mounted) setState(() => _isLoading = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    // Lắng nghe trạng thái loading từ ViewModel để vẽ UI
+    final authVM = context.watch<AuthViewModel>(); 
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -132,7 +140,7 @@ class _SignInScreenState extends State<SignInScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // --- Nút chuyển đổi giữa Đăng nhập / Đăng ký ---
+            // --- Tabs chuyển đổi ---
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -165,11 +173,12 @@ class _SignInScreenState extends State<SignInScreen> {
             
             const SizedBox(height: 24),
             
-            // Nút Action chính
+            // Nút Action chính (Login/Register)
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: _isLoading ? null : _handleEmailAuth, 
+                // Disable nút khi đang loading
+                onPressed: authVM.isLoading ? null : _handleEmailAuth, 
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.all(12),
                   backgroundColor: const Color(0xff659B4D),
@@ -177,7 +186,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     borderRadius: BorderRadius.circular(24)
                   ),
                 ),
-                child: _isLoading 
+                child: authVM.isLoading 
                   ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
                   : Text(
                       _isLogin ? 'Đăng nhập' : 'Đăng kí',
@@ -191,7 +200,7 @@ class _SignInScreenState extends State<SignInScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: _isLoading ? null : _handleGoogleLogin, 
+                onPressed: authVM.isLoading ? null : _handleGoogleLogin, 
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.all(12),
                   shape: RoundedRectangleBorder(
@@ -214,7 +223,7 @@ class _SignInScreenState extends State<SignInScreen> {
             ),
             
             const SizedBox(height: 12),
-            // Nút Facebook (Giữ nguyên UI)
+            // Nút Facebook
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -245,7 +254,7 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  // --- FORM ĐĂNG NHẬP ---
+  // --- FORM ĐĂNG NHẬP (Giữ nguyên UI) ---
   Widget _buildLoginForm() {
     return Form(
       child: Column(
@@ -281,7 +290,6 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
           const SizedBox(height: 12),
           
-          // --- CHECKBOX NHỚ MẬT KHẨU ---
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -312,7 +320,7 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  // --- FORM ĐĂNG KÝ ---
+  // --- FORM ĐĂNG KÝ (Giữ nguyên UI) ---
   Widget _buildRegisterForm() {
     return Form(
       child: Column(

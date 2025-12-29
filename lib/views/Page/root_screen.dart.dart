@@ -12,7 +12,12 @@ import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
 class RootScreen extends StatefulWidget {
-  const RootScreen({super.key});
+  final int initialIndex;
+
+  const RootScreen({
+    super.key, 
+    this.initialIndex = 0 // Mặc định là 0 (Trang chủ)
+  });
 
   @override
   State<RootScreen> createState() => _HomeScreenState();
@@ -33,6 +38,7 @@ class _HomeScreenState extends State<RootScreen> {
   @override
   void initState(){
     super.initState();
+    currentIndex = widget.initialIndex;
     _screens = [
       HomeScreen(),
       ExploreScreen(),

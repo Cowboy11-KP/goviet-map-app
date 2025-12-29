@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:goviet_map_app/models/place_model.dart';
 import 'package:goviet_map_app/viewmodels/map_viewmodel.dart';
 import 'package:goviet_map_app/viewmodels/place_viewmodel.dart';
 import 'package:goviet_map_app/views/Page/home/city_detail_screen.dart';
+import 'package:goviet_map_app/views/Page/root_screen.dart.dart';
 import 'package:goviet_map_app/views/components/city_card.dart';
 import 'package:goviet_map_app/views/components/place_card.dart';
 import 'package:goviet_map_app/views/detail/detail_screen.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
-import 'package:goviet_map_app/models/place_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -61,7 +62,6 @@ class _HomeScreenState extends State<HomeScreen> {
         return distance < 20.0; // Chỉ lấy dưới 20km
       }).toList();
       
-      // (Tùy chọn) Sắp xếp từ gần đến xa
       nearPlaces.sort((a, b) {
         final distA = MapViewModel.calculateDistance(mapVM.currentPosition!.latitude, mapVM.currentPosition!.longitude, a.location.latitude, a.location.longitude);
         final distB = MapViewModel.calculateDistance(mapVM.currentPosition!.latitude, mapVM.currentPosition!.longitude, b.location.latitude, b.location.longitude);
@@ -76,9 +76,8 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // --- UI SECTION 1: GẦN BẠN ---
-            _buildSectionHeader(theme, 'Gần bạn (< 20km)', () {}),
+            _buildSectionHeader(theme, 'Gần bạn', () {}),
             
-            // Kiểm tra trạng thái vị trí để hiển thị UI phù hợp
             if (!mapVM.hasPosition)
               _buildEmptyState("Vui lòng bật định vị để xem địa điểm gần bạn", Icons.location_off)
             else if (nearPlaces.isEmpty)
@@ -117,7 +116,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   cityName: provinceName,
                   places: provincePlaces,
                   onTap: () {
-                    // Chuyển sang màn hình danh sách địa điểm của tỉnh đó
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -137,7 +135,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Widget hiển thị khi danh sách rỗng
   Widget _buildEmptyState(String message, IconData icon) {
     return Container(
       height: 150,
@@ -171,6 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // --- HÀM NÀY ĐÃ ĐƯỢC CHỈNH SỬA LOGIC DẪN ĐƯỜNG ---
   Widget _buildPlaceList(List<Place> places, MapViewModel mapVM) {
     return SizedBox(
       height: 280,
@@ -180,7 +178,6 @@ class _HomeScreenState extends State<HomeScreen> {
         itemBuilder: (context, index) {
           final place = places[index];
 
-          // Tính toán lại để hiển thị text trên Card
           double? distance;
           if (mapVM.currentPosition != null) {
             distance = MapViewModel.calculateDistance(
@@ -203,17 +200,32 @@ class _HomeScreenState extends State<HomeScreen> {
                 MaterialPageRoute(
                   builder: (context) => DetailScreen(
                     place: place,
+                    // --- LOGIC DẪN ĐƯỜNG MỚI ---
                     onDirectionsPressed: () {
+                      // 1. Đóng màn hình Detail
                       Navigator.pop(context);
+                      
                       if (mapVM.hasPosition) {
+                        // 2. Gọi ViewModel để tìm đường
                         mapVM.fetchRoute(
                           LatLng(mapVM.currentPosition!.latitude, mapVM.currentPosition!.longitude),
                           LatLng(place.location.latitude, place.location.longitude)
                         );
+                        
+                        // 3. Reset Stack về RootScreen và mở Tab Map (index 1)
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                            builder: (context) => const RootScreen(initialIndex: 1)
+                          ),
+                          (route) => false,
+                        );
+
+                        // 4. Thông báo
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Đã tìm thấy đường! Chuyển sang tab Khám phá."),
+                          SnackBar(
+                            content: Text("Đang dẫn đường tới ${place.name}"),
                             backgroundColor: Colors.green,
+                            duration: const Duration(seconds: 2),
                           )
                         );
                       } else {
