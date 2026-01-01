@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
+import 'package:goviet_map_app/utils/place_category_helper.dart';
 import 'package:goviet_map_app/viewmodels/map_viewmodel.dart';
 import 'package:goviet_map_app/viewmodels/place_viewmodel.dart';
 import 'package:goviet_map_app/views/detail/detail_screen.dart';
@@ -141,18 +142,23 @@ class _ExploreScreenState extends State<ExploreScreen> {
               ),
 
               MarkerLayer(
-                markers: placeVM.places.map((place) => Marker(
-                  point: LatLng(place.location.latitude, place.location.longitude),
-                  width: 80,
-                  height: 80,
-                  child: GestureDetector(
-                    onTap: () {
-                      mapVM.clearRoute();
-                      _showPlaceDetailSheet(context, place);
-                    },
-                    child: _buildMarkerIcon(place.name),
-                  ),
-                )).toList(),
+                markers: placeVM.places.map((place) {
+                  
+                  String categoryName = place.category.toString();
+
+                  return Marker(
+                    point: LatLng(place.location.latitude, place.location.longitude),
+                    width: 50, 
+                    height: 50,
+                    child: GestureDetector(
+                      onTap: () {
+                        mapVM.clearRoute();
+                        _showPlaceDetailSheet(context, place);
+                      },
+                      child: PlaceCategoryHelper.getIconWidget(categoryName),
+                    ),
+                  );
+                }).toList(),
               ),
             ],
           ),
@@ -468,18 +474,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
         },
         child: const Icon(Icons.my_location),
       ),
-    );
-  }
-
-  Widget _buildMarkerIcon(String name) {
-    return Column(
-      children: [
-        Text(
-          name, 
-          style: const TextStyle(color: Colors.black54, fontWeight: FontWeight.bold, fontSize: 10), 
-          overflow: TextOverflow.ellipsis, maxLines: 1
-        )
-      ],
     );
   }
 
