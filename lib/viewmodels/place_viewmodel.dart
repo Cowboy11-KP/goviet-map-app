@@ -111,4 +111,51 @@ class PlaceViewModel extends ChangeNotifier {
     }
     return data.replaceAll(" ", "");
   }
+
+  // --- HÀM LỌC MARKER (CHỈ DỰA THEO CATEGORY) ---
+  void filterPlacesByLabel(String label) {
+    // 1. Reset nếu chọn "Phổ biến"
+    if (label == "Phổ biến") {
+      _places = List.from(_masterPlaces);
+      notifyListeners();
+      return;
+    }
+
+    // 2. Mapping: Từ Label trên UI -> Giá trị Category trong Database
+    List<String> validCategories = [];
+    String key = label.toLowerCase();
+
+    if (key == "núi") {
+      // Các category liên quan đến núi
+      validCategories = ["mountain", "hill", "núi", "leo núi", "trekking"];
+    } else if (key == "biển") {
+      // Các category liên quan đến biển/đảo
+      validCategories = ["beach", "sea", "island", "biển", "đảo", "vịnh"];
+    } else if (key == "ăn uống") {
+      // Các category liên quan đến ăn uống
+      validCategories = ["food", "restaurant", "cafe", "coffee", "ăn uống", "nhà hàng"];
+    } else if (key == "chụp hình") {
+      // Category chung cho du lịch/sống ảo
+      validCategories = ["travel", "checkin", "photo", "tourist", "du lịch"];
+    } else {
+      // Trường hợp khác thì lấy chính label làm category
+      validCategories = [key];
+    }
+
+    // 3. Thực hiện lọc (CHỈ KIỂM TRA FIELD CATEGORY)
+    _places = _masterPlaces.where((place) {
+      // Lấy field category của data (đảm bảo không null)
+      String currentCategory = place.category.toString().toLowerCase();
+
+      // Kiểm tra xem category của địa điểm có nằm trong danh sách cần lọc không
+      for (var validCat in validCategories) {
+        if (currentCategory.contains(validCat)) {
+          return true;
+        }
+      }
+      return false;
+    }).toList();
+
+    notifyListeners();
+  }
 }

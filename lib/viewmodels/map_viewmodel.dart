@@ -103,7 +103,7 @@ class MapViewModel extends ChangeNotifier {
     // Logic check quyền tương tự fetchLocation...
     const LocationSettings locationSettings = LocationSettings(
       accuracy: LocationAccuracy.high,
-      distanceFilter: 10,
+      distanceFilter: 10,             // Di chuyển 10 mét mới báo về 1 lần (để đỡ tốn pin)
     );
 
     await _positionStreamSubscription?.cancel();

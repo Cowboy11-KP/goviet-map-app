@@ -187,7 +187,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: ElevatedButton.icon(
                 onPressed: () async {
                   await authVM.signOut();
-                  // Có thể navigate về màn hình Login ở đây
+                  Navigator.pushReplacementNamed(context, '/login');
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFEBEBEB), // Màu xám nhạt

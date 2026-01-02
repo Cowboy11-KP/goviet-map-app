@@ -31,6 +31,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
     {"label": "Ăn uống", "icon": Icons.restaurant},
   ];
 
+  int _selectedFilterIndex = 0;
+
   @override
   void initState() {
     super.initState();
@@ -131,13 +133,22 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 ),
 
               CurrentLocationLayer(
-                alignPositionOnUpdate: AlignOnUpdate.never,
-                alignDirectionOnUpdate: AlignOnUpdate.never,
+                // 1. Nếu đang dẫn đường -> Luôn căn giữa. Ngược lại -> Không làm gì.
+                alignPositionOnUpdate: mapVM.isNavigating 
+                    ? AlignOnUpdate.always 
+                    : AlignOnUpdate.never,
+
+                // 2. Nếu đang dẫn đường -> Xoay bản đồ theo hướng đi.
+                alignDirectionOnUpdate: mapVM.isNavigating 
+                    ? AlignOnUpdate.always 
+                    : AlignOnUpdate.never,
+
                 style: const LocationMarkerStyle(
                   marker: DefaultLocationMarker(
                     child: Icon(Icons.navigation, color: Colors.white, size: 20),
                   ),
                   markerSize: Size(40, 40),
+                  markerDirection: MarkerDirection.heading, // Mũi tên chỉ theo hướng la bàn
                 ),
               ),
 
@@ -343,15 +354,44 @@ class _ExploreScreenState extends State<ExploreScreen> {
               separatorBuilder: (_, __) => const SizedBox(width: 8),
               itemBuilder: (context, index) {
                 final filter = _filters[index];
+                final isSelected = _selectedFilterIndex == index;
+
                 return ActionChip(
-                  avatar: Icon(filter['icon'], size: 16, color: Colors.green[700]),
-                  label: Text(filter['label'], style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
-                  backgroundColor: Colors.white,
-                  elevation: 2,
+                  // Đổi màu nền và màu chữ khi được chọn
+                  backgroundColor: isSelected ? Colors.green[100] : Colors.white,
+                  avatar: Icon(
+                    filter['icon'], 
+                    size: 16, 
+                    color: isSelected ? Colors.green[800] : Colors.green[700]
+                  ),
+                  label: Text(
+                    filter['label'], 
+                    style: TextStyle(
+                      fontSize: 13, 
+                      fontWeight: FontWeight.w600,
+                      color: isSelected ? Colors.green[900] : Colors.black87
+                    )
+                  ),
+                  elevation: isSelected ? 0 : 2,
                   shadowColor: Colors.black26,
-                  side: BorderSide.none,
+                  side: isSelected 
+                      ? BorderSide(color: Colors.green.shade300, width: 1) 
+                      : BorderSide.none,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                  onPressed: () {},
+                  
+                  // [XỬ LÝ SỰ KIỆN]
+                  onPressed: () {
+                    setState(() {
+                      _selectedFilterIndex = index;
+                    });
+                    
+                    // Gọi ViewModel để lọc data
+                    context.read<PlaceViewModel>().filterPlacesByLabel(filter['label']);
+                    
+                    // Reset kết quả tìm kiếm text (nếu có) để tránh xung đột
+                    context.read<MapViewModel>().clearSearchResults();
+                    _searchController.clear();
+                  },
                 );
               },
             ),
